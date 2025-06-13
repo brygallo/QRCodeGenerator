@@ -6,12 +6,14 @@ A **QR Code Generator** with customization options for colors, background, and d
 
 ## **🚀 Features**
 
-✅ Real-time QR code generation.  
-✅ Customizable QR code colors and background.  
-✅ Option for a **transparent background**.  
-✅ Download as **PNG** (with or without background).  
-✅ Download as **PDF** (centered and optimized).  
-✅ **Responsive design** with **Material UI**.  
+✅ Real-time QR code generation.
+✅ Customizable QR code colors and background.
+✅ Option for a **transparent background**.
+✅ Download as **PNG** (with or without background).
+✅ Download as **PDF** (centered and optimized).
+✅ **Responsive design** with **Material UI**.
+✅ Generate **WhatsApp links** quickly.
+✅ Local history of recent QR codes (cleared on reload).
 ✅ **Runs with Docker and Docker Compose**.
 
 ---

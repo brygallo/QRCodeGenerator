@@ -1,8 +1,10 @@
 import { useState } from "react";
 import QRCustomization from "./QRCustomization";
+import WhatsAppLink from "./WhatsAppLink";
 import QRCodeDisplay from "./QRCodeDisplay";
+import QRHistory from "./QRHistory";
 import DownloadOptions from "./DownloadOptions";
-import { Typography, Paper, Box, useTheme } from "@mui/material";
+import { Typography, Paper, Box, Button, useTheme } from "@mui/material";
 
 const QRGenerator = () => {
   const theme = useTheme();
@@ -10,6 +12,12 @@ const QRGenerator = () => {
   const [color, setColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [transparent, setTransparent] = useState(false);
+  const [history, setHistory] = useState([]);
+
+  const saveToHistory = () => {
+    const item = { text, color, bgColor };
+    setHistory((prev) => [item, ...prev].slice(0, 5));
+  };
 
   return (
     <Box
@@ -41,14 +49,25 @@ const QRGenerator = () => {
         </Typography>
 
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-          <QRCustomization text={text} setText={setText} color={color} setColor={setColor} bgColor={bgColor} setBgColor={setBgColor} />
+          <QRCustomization
+            text={text}
+            setText={setText}
+            color={color}
+            setColor={setColor}
+            bgColor={bgColor}
+            setBgColor={setBgColor}
+          />
+          <WhatsAppLink setText={setText} />
           <QRCodeDisplay text={text} color={color} bgColor={bgColor} />
+          <Button variant="outlined" onClick={saveToHistory}
+            sx={{ mt: 1 }}>Save to History</Button>
           <DownloadOptions
             text={text}
             bgColor={bgColor}
             transparent={transparent}
             setTransparent={setTransparent}
           />
+          <QRHistory history={history} />
         </Box>
       </Paper>
     </Box>
