@@ -9,7 +9,7 @@ const QRCodeTypeSelector = ({ qrType, setQrType }) => (
       label="QR Content"
       onChange={(e) => setQrType(e.target.value)}
     >
-      <MenuItem value="text">Texto</MenuItem>
+      <MenuItem value="text">Text</MenuItem>
       <MenuItem value="whatsapp">WhatsApp Link</MenuItem>
       <MenuItem value="url">URL</MenuItem>
     </Select>

@@ -28,8 +28,8 @@ const QRContentForm = ({
     ) : (
       <TextField
         fullWidth
-        label={qrType === 'url' ? 'URL' : 'Texto'}
-        placeholder={qrType === 'url' ? 'https://example.com' : 'Ingresa texto'}
+        label={qrType === 'url' ? 'URL' : 'Text'}
+        placeholder={qrType === 'url' ? 'https://example.com' : 'Enter text'}
         variant="outlined"
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}

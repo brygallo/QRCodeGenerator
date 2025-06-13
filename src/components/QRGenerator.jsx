@@ -52,7 +52,7 @@ const QRGenerator = () => {
           my: 3,
           p: 4,
           width: "100%",
-          maxWidth: 420,
+          maxWidth: 480,
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
