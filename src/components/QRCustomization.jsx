@@ -1,4 +1,4 @@
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack, TextField } from "@mui/material";
 import QRShapeSelector from "./QRShapeSelector";
 
 
@@ -11,40 +11,35 @@ const QRCustomization = ({ color, setColor, bgColor, setBgColor, shape, setShape
         Customize Your QR Code
       </Typography>
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Box sx={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="body2" color="text.secondary">
-            Color
-          </Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <input
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid #ccc",
-              cursor: "pointer",
-            }}
+            style={{ width: 40, height: 40, border: '1px solid #ccc', cursor: 'pointer' }}
+          />
+          <TextField
+            label="Color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            size="small"
+            sx={{ width: 110 }}
           />
         </Box>
-
-        <Box sx={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="body2" color="text.secondary">
-            Background
-          </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <input
             type="color"
             value={bgColor}
             onChange={(e) => setBgColor(e.target.value)}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid #ccc",
-              cursor: "pointer",
-            }}
+            style={{ width: 40, height: 40, border: '1px solid #ccc', cursor: 'pointer' }}
+          />
+          <TextField
+            label="Background"
+            value={bgColor}
+            onChange={(e) => setBgColor(e.target.value)}
+            size="small"
+            sx={{ width: 110 }}
           />
         </Box>
       </Stack>

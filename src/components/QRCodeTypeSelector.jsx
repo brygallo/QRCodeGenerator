@@ -1,19 +1,20 @@
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { Tabs, Tab, Box } from "@mui/material";
+import TextFieldsIcon from '@mui/icons-material/TextFields';
+import LinkIcon from '@mui/icons-material/Link';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 const QRCodeTypeSelector = ({ qrType, setQrType }) => (
-  <FormControl fullWidth sx={{ mb: 2 }}>
-    <InputLabel id="qr-type-label">QR Content</InputLabel>
-    <Select
-      labelId="qr-type-label"
+  <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+    <Tabs
       value={qrType}
-      label="QR Content"
-      onChange={(e) => setQrType(e.target.value)}
+      onChange={(_, val) => setQrType(val)}
+      variant="fullWidth"
     >
-      <MenuItem value="text">Text</MenuItem>
-      <MenuItem value="whatsapp">WhatsApp Link</MenuItem>
-      <MenuItem value="url">URL</MenuItem>
-    </Select>
-  </FormControl>
+      <Tab icon={<TextFieldsIcon />} iconPosition="start" value="text" label="Text" />
+      <Tab icon={<WhatsAppIcon />} iconPosition="start" value="whatsapp" label="WhatsApp" />
+      <Tab icon={<LinkIcon />} iconPosition="start" value="url" label="URL" />
+    </Tabs>
+  </Box>
 );
 
 export default QRCodeTypeSelector;

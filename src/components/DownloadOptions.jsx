@@ -1,4 +1,6 @@
 import { Button, Stack, FormControlLabel, Checkbox } from "@mui/material";
+import DownloadIcon from '@mui/icons-material/Download';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -96,11 +98,11 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
         label="Transparent Background"
       />
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" color="primary" onClick={downloadQRAsImage}>
-          Download as PNG
+        <Button variant="contained" color="primary" onClick={downloadQRAsImage} startIcon={<DownloadIcon />}>
+          PNG
         </Button>
-        <Button variant="contained" color="secondary" onClick={downloadQRAsPDF}>
-          Download as PDF
+        <Button variant="contained" color="secondary" onClick={downloadQRAsPDF} startIcon={<PictureAsPdfIcon />}>
+          PDF
         </Button>
       </Stack>
     </Stack>

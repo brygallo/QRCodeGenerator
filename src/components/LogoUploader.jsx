@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Avatar, IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 const LogoUploader = ({ logo, setLogo, onWarning }) => {
   const inputRef = useRef(null);
@@ -46,42 +47,16 @@ const LogoUploader = ({ logo, setLogo, onWarning }) => {
         />
       </Button>
       {logo && (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <Box
-            sx={{
-              width: 70,
-              height: 70,
-              bgcolor: "#fff",
-              borderRadius: 1,
-              overflow: "hidden",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "1px solid #ccc",
-              p: 1,
-            }}
-          >
-            <img
-              src={logo}
-              alt="Logo preview"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-          </Box>
-          <Button
+        <Box sx={{ position: 'relative' }}>
+          <Avatar src={logo} alt="Logo preview" sx={{ width: 72, height: 72 }} />
+          <IconButton
             size="small"
             color="error"
-            variant="text"
             onClick={removeLogo}
+            sx={{ position: 'absolute', top: -10, right: -10, bgcolor: 'white' }}
           >
-            Remove
-          </Button>
+            <CloseIcon fontSize="small" />
+          </IconButton>
         </Box>
       )}
     </Stack>
