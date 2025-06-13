@@ -42,8 +42,13 @@ const QRGenerator = () => {
 
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
           <QRCustomization text={text} setText={setText} color={color} setColor={setColor} bgColor={bgColor} setBgColor={setBgColor} />
-          <QRCodeDisplay text={text} color={color} bgColor={bgColor} transparent={transparent} />
-          <DownloadOptions text={text} transparent={transparent} setTransparent={setTransparent} />
+          <QRCodeDisplay text={text} color={color} bgColor={bgColor} />
+          <DownloadOptions
+            text={text}
+            bgColor={bgColor}
+            transparent={transparent}
+            setTransparent={setTransparent}
+          />
         </Box>
       </Paper>
     </Box>
