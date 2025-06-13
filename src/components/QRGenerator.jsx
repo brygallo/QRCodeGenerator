@@ -7,12 +7,15 @@ import QRContentForm from "./QRContentForm";
 import { generateWhatsappLink } from "../utils/whatsapp";
 import {
   Typography,
-  Paper,
   Box,
   Button,
   useTheme,
   Snackbar,
   Alert,
+  Grid,
+  Card,
+  CardContent,
+  Stack,
 } from "@mui/material";
 
 const QRGenerator = () => {
@@ -35,87 +38,82 @@ const QRGenerator = () => {
       : inputText;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-        bgcolor: theme.palette.secondary.main,
-        p: 0,
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          my: 3,
-          p: 4,
-          width: "100%",
-          maxWidth: 480,
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 3,
-          position: "relative",
-        }}
-      >
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mb: 2 }}>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="small"
-            onClick={() => window.location.reload()}
-            sx={{ textTransform: "none", borderRadius: 2 }}
-          >
-            Reset Options
-          </Button>
-        </Box>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "#333" }}>
-          QR Code Generator
-        </Typography>
+    <Box sx={{ bgcolor: theme.palette.background.default, p: 2, minHeight: "100vh" }}>
+      <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2 }}>
+        QR Code Generator
+      </Typography>
+      <Grid container spacing={2} justifyContent="center">
+        <Grid item xs={12} md={6}>
+          <Stack spacing={2}>
+            <Card elevation={2}>
+              <CardContent>
+                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+                  <Typography variant="h6">Configuration</Typography>
+                  <Button size="small" variant="outlined" onClick={() => window.location.reload()}>
+                    Reset
+                  </Button>
+                </Box>
+                <QRContentForm
+                  qrType={qrType}
+                  setQrType={setQrType}
+                  inputText={inputText}
+                  setInputText={setInputText}
+                  prefix={waPrefix}
+                  setPrefix={setWaPrefix}
+                  number={waNumber}
+                  setNumber={setWaNumber}
+                  message={waMessage}
+                  setMessage={setWaMessage}
+                />
+              </CardContent>
+            </Card>
 
-        <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-          <QRContentForm
-            qrType={qrType}
-            setQrType={setQrType}
-            inputText={inputText}
-            setInputText={setInputText}
-            prefix={waPrefix}
-            setPrefix={setWaPrefix}
-            number={waNumber}
-            setNumber={setWaNumber}
-            message={waMessage}
-            setMessage={setWaMessage}
-          />
-          <QRCustomization
-            color={color}
-            setColor={setColor}
-            bgColor={bgColor}
-            setBgColor={setBgColor}
-            shape={shape}
-            setShape={setShape}
-          />
-          <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
-          <QRCodeDisplay text={qrValue} color={color} bgColor={bgColor} shape={shape} logo={logo} />
-          <DownloadOptions
-            text={qrValue}
-            bgColor={bgColor}
-            transparent={transparent}
-            setTransparent={setTransparent}
-            onInvalid={setWarning}
-          />
-        </Box>
-        <Snackbar
-          open={Boolean(warning)}
-          autoHideDuration={3000}
-          onClose={() => setWarning("")}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert severity="warning" variant="filled" onClose={() => setWarning("")}> {warning} </Alert>
-        </Snackbar>
-      </Paper>
+            <Card elevation={2}>
+              <CardContent>
+                <QRCustomization
+                  color={color}
+                  setColor={setColor}
+                  bgColor={bgColor}
+                  setBgColor={setBgColor}
+                  shape={shape}
+                  setShape={setShape}
+                />
+                <Box sx={{ mt: 2 }}>
+                  <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Stack>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Stack spacing={2} alignItems="center">
+            <Card elevation={2}>
+              <CardContent>
+                <QRCodeDisplay text={qrValue} color={color} bgColor={bgColor} shape={shape} logo={logo} />
+              </CardContent>
+            </Card>
+            <Card elevation={2} sx={{ width: "100%" }}>
+              <CardContent>
+                <DownloadOptions
+                  text={qrValue}
+                  bgColor={bgColor}
+                  transparent={transparent}
+                  setTransparent={setTransparent}
+                  onInvalid={setWarning}
+                />
+              </CardContent>
+            </Card>
+          </Stack>
+        </Grid>
+      </Grid>
+      <Snackbar
+        open={Boolean(warning)}
+        autoHideDuration={3000}
+        onClose={() => setWarning("")}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert severity="warning" variant="filled" onClose={() => setWarning("")}> {warning} </Alert>
+      </Snackbar>
     </Box>
   );
 };
