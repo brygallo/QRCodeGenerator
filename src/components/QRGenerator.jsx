@@ -36,6 +36,7 @@ const QRGenerator = () => {
       <Paper
         elevation={3}
         sx={{
+          my: 3,
           p: 4,
           width: "100%",
           maxWidth: 420,
