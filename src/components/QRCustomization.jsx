@@ -1,6 +1,7 @@
 import { TextField, Box, Typography, Stack } from "@mui/material";
+import QRShapeSelector from "./QRShapeSelector";
 
-const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, error, setError }) => {
+const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, shape, setShape, error, setError }) => {
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -69,6 +70,7 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
           />
         </Box>
       </Stack>
+      <QRShapeSelector shape={shape} setShape={setShape} color={color} />
     </Box>
   );
 };
