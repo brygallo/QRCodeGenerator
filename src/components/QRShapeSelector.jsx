@@ -40,18 +40,19 @@ const QRShapeSelector = ({ shape, setShape, color }) => {
         row
         value={shape}
         onChange={(e) => setShape(e.target.value)}
-        sx={{ justifyContent: "center" }}
+        sx={{ justifyContent: "space-between", flexWrap: "nowrap" }}
       >
         {shapeOptions.map((opt, idx) => (
           <FormControlLabel
             key={opt.value}
             value={opt.value}
             control={<Radio />}
+            sx={{ mx: 0.5 }}
             label={
               <Box
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
               >
-                <Box ref={(el) => (refs.current[idx] = el)} sx={{ width: 60, height: 60 }} />
+                <Box ref={(el) => (refs.current[idx] = el)} sx={{ width: 55, height: 55 }} />
                 <Typography variant="caption">{opt.label}</Typography>
               </Box>
             }

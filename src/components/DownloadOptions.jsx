@@ -32,18 +32,6 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
         backgroundColor: transparent ? null : bgColor,
         scale: 4,
       }).then((canvas) => {
-        const ctx = canvas.getContext("2d");
-
-        if (!transparent) {
-    
-          const size = canvas.width;
-          ctx.globalCompositeOperation = "destination-in";
-          ctx.beginPath();
-          ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-
         const link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");
         link.download = `${text || "QR_Code"}.png`;
