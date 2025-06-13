@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
-import { Box } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
 import QRCodeStyling from "qr-code-styling";
 
 const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
   const ref = useRef(null);
   const qrRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const options = {
@@ -24,9 +25,10 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
 
     if (!qrRef.current) {
       qrRef.current = new QRCodeStyling(options);
-      qrRef.current.append(ref.current);
+      qrRef.current.append(ref.current).then(() => setLoading(false));
     } else {
-      qrRef.current.update(options);
+      setLoading(true);
+      qrRef.current.update(options).then(() => setLoading(false));
     }
   }, [text, color, shape, logo]);
 
@@ -41,12 +43,19 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
         width: 220,
         height: 220,
         bgcolor: bgColor,
-        padding: 2,
+        p: 2,
+        m: 1,
         borderRadius: bgColor !== "transparent" ? "16px" : "0px",
         boxShadow: bgColor !== "transparent" ? 3 : 0,
+        border: "1px solid #eee",
       }}
     >
       <Box ref={ref} />
+      {loading && (
+        <Box sx={{ position: 'absolute' }}>
+          <CircularProgress size={40} />
+        </Box>
+      )}
     </Box>
   );
 };
