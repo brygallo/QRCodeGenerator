@@ -25,10 +25,12 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
 
     if (!qrRef.current) {
       qrRef.current = new QRCodeStyling(options);
-      qrRef.current.append(ref.current).then(() => setLoading(false));
+      qrRef.current.append(ref.current);
+      setLoading(false);
     } else {
       setLoading(true);
-      qrRef.current.update(options).then(() => setLoading(false));
+      qrRef.current.update(options);
+      setLoading(false);
     }
   }, [text, color, shape, logo]);
 
