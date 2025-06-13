@@ -51,7 +51,7 @@ const QRGenerator = () => {
           position: "relative",
         }}
       >
-        <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mb: 2 }}>
           <Button
             variant="outlined"
             size="small"
