@@ -7,6 +7,7 @@ import {
   Typography,
   Paper,
   Box,
+  Button,
   useTheme,
   Snackbar,
   Alert,
@@ -47,8 +48,19 @@ const QRGenerator = () => {
           flexDirection: "column",
           alignItems: "center",
           gap: 3,
+          position: "relative",
         }}
       >
+        <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => window.location.reload()}
+            sx={{ textTransform: "none" }}
+          >
+            Reset Options
+          </Button>
+        </Box>
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "#333" }}>
           QR Code Generator
         </Typography>

@@ -45,8 +45,8 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 55,
-            height: 55,
+            width: 80,
+            height: 80,
             bgcolor: "#fff",
             borderRadius: 2,
             overflow: "hidden",
@@ -54,6 +54,7 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
             alignItems: "center",
             justifyContent: "center",
             boxShadow: 1,
+            p: 1,
           }}
         >
           <img

@@ -1,4 +1,4 @@
-import { TextField, Box, Typography, Stack, Button } from "@mui/material";
+import { TextField, Box, Typography, Stack } from "@mui/material";
 import QRShapeSelector from "./QRShapeSelector";
 
 
@@ -15,10 +15,6 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
     setText(value);
   };
 
-  const handleResetColors = () => {
-    setColor("#000000");
-    setBgColor("#ffffff");
-  };
 
   return (
     <Box sx={{ width: "100%", textAlign: "center" }}>
@@ -77,14 +73,6 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
         </Box>
       </Stack>
       <QRShapeSelector shape={shape} setShape={setShape} color={color} />
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handleResetColors}
-        sx={{ mt: 2, textTransform: "none" }}
-      >
-        Reset Colors
-      </Button>
     </Box>
   );
 };
