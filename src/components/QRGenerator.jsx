@@ -2,10 +2,12 @@ import { useState } from "react";
 import QRCustomization from "./QRCustomization";
 import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
+import LogoUploader from "./LogoUploader";
 import {
   Typography,
   Paper,
   Box,
+  Button,
   useTheme,
   Snackbar,
   Alert,
@@ -20,6 +22,7 @@ const QRGenerator = () => {
   const [transparent, setTransparent] = useState(false);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
+  const [logo, setLogo] = useState(null);
 
   return (
     <Box
@@ -45,8 +48,20 @@ const QRGenerator = () => {
           flexDirection: "column",
           alignItems: "center",
           gap: 3,
+          position: "relative",
         }}
       >
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mb: 2 }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="small"
+            onClick={() => window.location.reload()}
+            sx={{ textTransform: "none", borderRadius: 2 }}
+          >
+            Reset Options
+          </Button>
+        </Box>
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold", color: "#333" }}>
           QR Code Generator
         </Typography>
@@ -64,7 +79,8 @@ const QRGenerator = () => {
             error={error}
             setError={setError}
           />
-          <QRCodeDisplay text={text} color={color} bgColor={bgColor} shape={shape} />
+          <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
+          <QRCodeDisplay text={text} color={color} bgColor={bgColor} shape={shape} logo={logo} />
           <DownloadOptions
             text={text}
             bgColor={bgColor}

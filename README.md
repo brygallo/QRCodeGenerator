@@ -1,6 +1,6 @@
 # ** QR Code Generator**
 
-A **QR Code Generator** with customization options for colors, background, and download choices in **PNG** and **PDF**. Built with **React**, **Material UI**, and **qrcode.react**.
+A **QR Code Generator** with customization options for colors, background, and download choices in **PNG** and **PDF**. Built with **React**, **Material UI**, and **qr-code-styling**.
 
 ---
 
@@ -8,7 +8,8 @@ A **QR Code Generator** with customization options for colors, background, and d
 
 ✅ Real-time QR code generation.  
 ✅ Customizable QR code colors and background.
-✅ Reset colors to default with one click.
+✅ Reset all options with a single click.
+✅ Upload a custom logo (PNG or SVG) with preview and automatic resizing in the QR code.
 ✅ Option for a **transparent background**.
 ✅ Download as **PNG** (with or without background).  
 ✅ Download as **PDF** (centered and optimized).  

@@ -7,19 +7,28 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
   const qrRef = useRef(null);
 
   useEffect(() => {
+    const options = {
+      width: 220,
+      height: 220,
+      data: text,
+      qrOptions: { errorCorrectionLevel: "H" },
+      image: logo || undefined,
+      imageOptions: {
+        margin: 4,
+        hideBackgroundDots: true,
+        crossOrigin: "anonymous",
+      },
+      dotsOptions: { color, type: shape },
+      backgroundOptions: { color: "transparent" },
+    };
+
     if (!qrRef.current) {
-      qrRef.current = new QRCodeStyling({
-        width: 220,
-        height: 220,
-        data: text,
-        dotsOptions: { color, type: shape },
-        backgroundOptions: { color: "transparent" },
-      });
+      qrRef.current = new QRCodeStyling(options);
       qrRef.current.append(ref.current);
     } else {
-      qrRef.current.update({ data: text, dotsOptions: { color, type: shape } });
+      qrRef.current.update(options);
     }
-  }, [text, color, shape]);
+  }, [text, color, shape, logo]);
 
   return (
     <Box
@@ -38,22 +47,6 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
       }}
     >
       <Box ref={ref} />
-      {logo && (
-        <img
-          src={logo}
-          alt="Logo"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "50px",
-            height: "50px",
-            borderRadius: "50%",
-            border: "2px solid white",
-          }}
-        />
-      )}
     </Box>
   );
 };
