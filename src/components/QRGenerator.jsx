@@ -16,6 +16,7 @@ const QRGenerator = () => {
   const [text, setText] = useState("Hello World");
   const [color, setColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
+  const [shape, setShape] = useState("square");
   const [transparent, setTransparent] = useState(false);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
@@ -35,9 +36,10 @@ const QRGenerator = () => {
       <Paper
         elevation={3}
         sx={{
+          my: 3,
           p: 4,
           width: "100%",
-          maxWidth: 500,
+          maxWidth: 420,
           textAlign: "center",
           display: "flex",
           flexDirection: "column",
@@ -57,10 +59,12 @@ const QRGenerator = () => {
             setColor={setColor}
             bgColor={bgColor}
             setBgColor={setBgColor}
+            shape={shape}
+            setShape={setShape}
             error={error}
             setError={setError}
           />
-          <QRCodeDisplay text={text} color={color} bgColor={bgColor} />
+          <QRCodeDisplay text={text} color={color} bgColor={bgColor} shape={shape} />
           <DownloadOptions
             text={text}
             bgColor={bgColor}
