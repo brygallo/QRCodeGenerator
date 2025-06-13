@@ -53,10 +53,11 @@ const QRGenerator = () => {
       >
         <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end", mb: 2 }}>
           <Button
-            variant="outlined"
+            variant="contained"
+            color="secondary"
             size="small"
             onClick={() => window.location.reload()}
-            sx={{ textTransform: "none" }}
+            sx={{ textTransform: "none", borderRadius: 2 }}
           >
             Reset Options
           </Button>
