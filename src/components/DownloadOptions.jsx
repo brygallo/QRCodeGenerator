@@ -1,10 +1,8 @@
 import { Button, Stack, FormControlLabel, Checkbox } from "@mui/material";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useState } from "react";
 
-const DownloadOptions = ({ text, bgColor }) => {
-  const [transparent, setTransparent] = useState(bgColor === "transparent");
+const DownloadOptions = ({ text, bgColor, transparent, setTransparent }) => {
 
   const downloadQRAsImage = () => {
     const qrElement = document.getElementById("qr-code");
