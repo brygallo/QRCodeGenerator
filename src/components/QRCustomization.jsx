@@ -1,6 +1,18 @@
 import { TextField, Box, Typography, Stack } from "@mui/material";
 
-const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor }) => {
+const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, error, setError }) => {
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const asciiRegex = /^[\x00-\x7F]*$/;
+    if (!asciiRegex.test(value)) {
+      setError("Invalid characters detected");
+    } else {
+      setError("");
+    }
+    setText(value);
+  };
+
   return (
     <Box sx={{ width: "100%", textAlign: "center" }}>
       <Typography variant="h6" color="text.primary" gutterBottom>
@@ -9,10 +21,14 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor }
 
       <TextField
         fullWidth
-        label="Enter text"
+        label="QR Text"
+        placeholder="Enter text or URL to encode"
         variant="outlined"
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={handleChange}
+        inputProps={{ maxLength: 300 }}
+        error={Boolean(error)}
+        helperText={error || `${text.length} / 300`}
         sx={{ mb: 2 }}
       />
 

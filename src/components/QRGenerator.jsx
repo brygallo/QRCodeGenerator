@@ -2,7 +2,14 @@ import { useState } from "react";
 import QRCustomization from "./QRCustomization";
 import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
-import { Typography, Paper, Box, useTheme } from "@mui/material";
+import {
+  Typography,
+  Paper,
+  Box,
+  useTheme,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 
 const QRGenerator = () => {
   const theme = useTheme();
@@ -10,6 +17,8 @@ const QRGenerator = () => {
   const [color, setColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [transparent, setTransparent] = useState(false);
+  const [error, setError] = useState("");
+  const [warning, setWarning] = useState("");
 
   return (
     <Box
@@ -41,15 +50,33 @@ const QRGenerator = () => {
         </Typography>
 
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-          <QRCustomization text={text} setText={setText} color={color} setColor={setColor} bgColor={bgColor} setBgColor={setBgColor} />
+          <QRCustomization
+            text={text}
+            setText={setText}
+            color={color}
+            setColor={setColor}
+            bgColor={bgColor}
+            setBgColor={setBgColor}
+            error={error}
+            setError={setError}
+          />
           <QRCodeDisplay text={text} color={color} bgColor={bgColor} />
           <DownloadOptions
             text={text}
             bgColor={bgColor}
             transparent={transparent}
             setTransparent={setTransparent}
+            onInvalid={setWarning}
           />
         </Box>
+        <Snackbar
+          open={Boolean(warning)}
+          autoHideDuration={3000}
+          onClose={() => setWarning("")}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert severity="warning" variant="filled" onClose={() => setWarning("")}> {warning} </Alert>
+        </Snackbar>
       </Paper>
     </Box>
   );

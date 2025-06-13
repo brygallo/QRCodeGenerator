@@ -2,9 +2,18 @@ import { Button, Stack, FormControlLabel, Checkbox } from "@mui/material";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const DownloadOptions = ({ text, bgColor, transparent, setTransparent }) => {
+const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid }) => {
+
+  const isEmpty = () => {
+    if (!text.trim()) {
+      onInvalid && onInvalid("Please enter text before downloading.");
+      return true;
+    }
+    return false;
+  };
 
   const downloadQRAsImage = () => {
+    if (isEmpty()) return;
     const qrElement = document.getElementById("qr-code");
 
     if (!qrElement) {
@@ -48,6 +57,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent }) => {
   };
 
   const downloadQRAsPDF = () => {
+    if (isEmpty()) return;
     const qrElement = document.getElementById("qr-code");
 
     if (!qrElement) {
