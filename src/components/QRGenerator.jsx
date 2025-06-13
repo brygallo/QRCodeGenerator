@@ -3,6 +3,8 @@ import QRCustomization from "./QRCustomization";
 import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
 import LogoUploader from "./LogoUploader";
+import QRContentForm from "./QRContentForm";
+import { generateWhatsappLink } from "../utils/whatsapp";
 import {
   Typography,
   Paper,
@@ -15,14 +17,22 @@ import {
 
 const QRGenerator = () => {
   const theme = useTheme();
-  const [text, setText] = useState("Hello World");
+  const [qrType, setQrType] = useState("text");
+  const [inputText, setInputText] = useState("Hello World");
+  const [waPrefix, setWaPrefix] = useState("593");
+  const [waNumber, setWaNumber] = useState("");
+  const [waMessage, setWaMessage] = useState("");
   const [color, setColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [shape, setShape] = useState("square");
   const [transparent, setTransparent] = useState(false);
-  const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
   const [logo, setLogo] = useState(null);
+
+  const qrValue =
+    qrType === "whatsapp"
+      ? generateWhatsappLink(waPrefix, waNumber, waMessage)
+      : inputText;
 
   return (
     <Box
@@ -67,22 +77,30 @@ const QRGenerator = () => {
         </Typography>
 
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+          <QRContentForm
+            qrType={qrType}
+            setQrType={setQrType}
+            inputText={inputText}
+            setInputText={setInputText}
+            prefix={waPrefix}
+            setPrefix={setWaPrefix}
+            number={waNumber}
+            setNumber={setWaNumber}
+            message={waMessage}
+            setMessage={setWaMessage}
+          />
           <QRCustomization
-            text={text}
-            setText={setText}
             color={color}
             setColor={setColor}
             bgColor={bgColor}
             setBgColor={setBgColor}
             shape={shape}
             setShape={setShape}
-            error={error}
-            setError={setError}
           />
           <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
-          <QRCodeDisplay text={text} color={color} bgColor={bgColor} shape={shape} logo={logo} />
+          <QRCodeDisplay text={qrValue} color={color} bgColor={bgColor} shape={shape} logo={logo} />
           <DownloadOptions
-            text={text}
+            text={qrValue}
             bgColor={bgColor}
             transparent={transparent}
             setTransparent={setTransparent}
