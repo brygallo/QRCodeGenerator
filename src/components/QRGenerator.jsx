@@ -39,6 +39,9 @@ const QRGenerator = () => {
 
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, p: 2, minHeight: "100vh" }}>
+      <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2 }}>
+        QR Code Generator
+      </Typography>
       <Grid container spacing={2} justifyContent="center">
         <Grid item xs={12} md={6}>
           <Stack spacing={2}>
@@ -82,39 +85,15 @@ const QRGenerator = () => {
             </Card>
           </Stack>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={6}
-          sx={{
-            bgcolor: theme.palette.primary.main,
-            color: '#fff',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            py: 2,
-          }}
-        >
-          <Stack spacing={2} alignItems="center" sx={{ width: '100%' }}>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: 'bold', textAlign: 'center', width: '100%' }}
-            >
-              QR Code Generator
-            </Typography>
-            <Card elevation={2} sx={{ mb: 1 }}>
+
+        <Grid item xs={12} md={6}>
+          <Stack spacing={2} alignItems="center">
+            <Card elevation={2}>
               <CardContent>
-                <QRCodeDisplay
-                  text={qrValue}
-                  color={color}
-                  bgColor={bgColor}
-                  shape={shape}
-                  logo={logo}
-                />
+                <QRCodeDisplay text={qrValue} color={color} bgColor={bgColor} shape={shape} logo={logo} />
               </CardContent>
             </Card>
-            <Card elevation={2} sx={{ width: '100%' }}>
+            <Card elevation={2} sx={{ width: "100%" }}>
               <CardContent>
                 <DownloadOptions
                   text={qrValue}
@@ -128,13 +107,16 @@ const QRGenerator = () => {
           </Stack>
         </Grid>
       </Grid>
+
       <Snackbar
         open={Boolean(warning)}
         autoHideDuration={3000}
         onClose={() => setWarning("")}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity="warning" variant="filled" onClose={() => setWarning("")}> {warning} </Alert>
+        <Alert severity="warning" variant="filled" onClose={() => setWarning("")}>
+          {warning}
+        </Alert>
       </Snackbar>
     </Box>
   );
