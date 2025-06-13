@@ -1,6 +1,7 @@
 import { TextField, Box, Typography, Stack, Button } from "@mui/material";
 import QRShapeSelector from "./QRShapeSelector";
 
+
 const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, shape, setShape, error, setError }) => {
 
   const handleChange = (e) => {
