@@ -39,20 +39,29 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
     >
       <Box ref={ref} />
       {logo && (
-        <img
-          src={logo}
-          alt="Logo"
-          style={{
+        <Box
+          sx={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "50px",
-            height: "50px",
-            borderRadius: "50%",
-            border: "2px solid white",
+            width: 55,
+            height: 55,
+            bgcolor: "#fff",
+            borderRadius: 2,
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: 1,
           }}
-        />
+        >
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        </Box>
       )}
     </Box>
   );

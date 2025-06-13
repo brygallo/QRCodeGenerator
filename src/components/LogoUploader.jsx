@@ -30,7 +30,12 @@ const LogoUploader = ({ logo, setLogo, onWarning }) => {
 
   return (
     <Stack spacing={1} alignItems="center">
-      <Button variant="outlined" component="label">
+      <Button
+        variant="contained"
+        component="label"
+        color="primary"
+        sx={{ textTransform: "none" }}
+      >
         Upload Logo
         <input
           ref={inputRef}
@@ -41,9 +46,39 @@ const LogoUploader = ({ logo, setLogo, onWarning }) => {
         />
       </Button>
       {logo && (
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-          <img src={logo} alt="Logo preview" style={{ width: 50, height: 50 }} />
-          <Button size="small" color="error" onClick={removeLogo}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <Box
+            sx={{
+              width: 50,
+              height: 50,
+              bgcolor: "#fff",
+              borderRadius: 1,
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              border: "1px solid #ccc",
+            }}
+          >
+            <img
+              src={logo}
+              alt="Logo preview"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </Box>
+          <Button
+            size="small"
+            color="error"
+            variant="text"
+            onClick={removeLogo}
+          >
             Remove
           </Button>
         </Box>

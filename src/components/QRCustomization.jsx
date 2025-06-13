@@ -77,7 +77,12 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
         </Box>
       </Stack>
       <QRShapeSelector shape={shape} setShape={setShape} color={color} />
-      <Button variant="outlined" onClick={handleResetColors} sx={{ mt: 2 }}>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={handleResetColors}
+        sx={{ mt: 2, textTransform: "none" }}
+      >
         Reset Colors
       </Button>
     </Box>
