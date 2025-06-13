@@ -7,7 +7,7 @@ A **QR Code Generator** with customization options for colors, background, and d
 ## **🚀 Features**
 
 ✅ Real-time QR code generation.  
-✅ Customizable QR code colors and background.  
+✅ Customizable QR code colors and background with hex preview and reset option.
 ✅ Option for a **transparent background**.  
 ✅ Download as **PNG** (with or without background).  
 ✅ Download as **PDF** (centered and optimized).  

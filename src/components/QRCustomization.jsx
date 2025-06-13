@@ -1,4 +1,5 @@
-import { TextField, Box, Typography, Stack } from "@mui/material";
+import { TextField, Box, Typography, Stack, Button } from "@mui/material";
+import ColorPicker from "./ColorPicker";
 
 const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, error, setError }) => {
 
@@ -32,43 +33,20 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
         sx={{ mb: 2 }}
       />
 
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Box sx={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="body2" color="text.secondary">
-            Color
-          </Typography>
-          <input
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid #ccc",
-              cursor: "pointer",
-            }}
-          />
-        </Box>
-
-        <Box sx={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="body2" color="text.secondary">
-            Background
-          </Typography>
-          <input
-            type="color"
-            value={bgColor}
-            onChange={(e) => setBgColor(e.target.value)}
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              border: "1px solid #ccc",
-              cursor: "pointer",
-            }}
-          />
-        </Box>
+      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={2} sx={{ mb: 2 }}>
+        <ColorPicker label="Color" color={color} setColor={setColor} />
+        <ColorPicker label="Background" color={bgColor} setColor={setBgColor} />
       </Stack>
+
+      <Button
+        variant="outlined"
+        onClick={() => {
+          setColor("#000000");
+          setBgColor("#ffffff");
+        }}
+      >
+        Reset Colors
+      </Button>
     </Box>
   );
 };
