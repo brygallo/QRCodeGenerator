@@ -2,6 +2,7 @@ import { useState } from "react";
 import QRCustomization from "./QRCustomization";
 import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
+import LogoUploader from "./LogoUploader";
 import {
   Typography,
   Paper,
@@ -20,6 +21,7 @@ const QRGenerator = () => {
   const [transparent, setTransparent] = useState(false);
   const [error, setError] = useState("");
   const [warning, setWarning] = useState("");
+  const [logo, setLogo] = useState(null);
 
   return (
     <Box
@@ -64,7 +66,8 @@ const QRGenerator = () => {
             error={error}
             setError={setError}
           />
-          <QRCodeDisplay text={text} color={color} bgColor={bgColor} shape={shape} />
+          <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
+          <QRCodeDisplay text={text} color={color} bgColor={bgColor} shape={shape} logo={logo} />
           <DownloadOptions
             text={text}
             bgColor={bgColor}
