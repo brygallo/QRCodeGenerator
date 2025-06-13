@@ -7,7 +7,7 @@ import {
   Autocomplete,
 } from "@mui/material";
 import { generateWhatsappLink } from "../utils/whatsapp";
-import { countryCodes } from "../data/countryCodes";
+import countryDialCodes from "../data/countryDialCodes.json";
 
 const WhatsAppForm = ({ prefix, setPrefix, number, setNumber, message, setMessage }) => {
   const link = generateWhatsappLink(prefix, number, message);
@@ -20,10 +20,10 @@ const WhatsAppForm = ({ prefix, setPrefix, number, setNumber, message, setMessag
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
       <Autocomplete
-        options={countryCodes}
+        options={countryDialCodes}
         getOptionLabel={(option) => `${option.flag} ${option.name} (+${option.code})`}
         renderInput={(params) => <TextField {...params} label="Country" />}
-        value={countryCodes.find((c) => c.code === prefix) || null}
+        value={countryDialCodes.find((c) => c.code === prefix) || null}
         onChange={(event, newValue) => setPrefix(newValue ? newValue.code : "")}
         isOptionEqualToValue={(option, value) => option.code === value.code}
         fullWidth

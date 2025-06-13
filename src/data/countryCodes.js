@@ -1,7 +1,0 @@
-export const countryCodes = [
-  { name: 'United States', flag: '\uD83C\uDDFA\uD83C\uDDF8', code: '1' },
-  { name: 'United Kingdom', flag: '\uD83C\uDDEC\uD83C\uDDE7', code: '44' },
-  { name: 'Spain', flag: '\uD83C\uDDEA\uD83C\uDDE8', code: '34' },
-  { name: 'Germany', flag: '\uD83C\uDDE9\uD83C\uDDEA', code: '49' },
-  { name: 'Ecuador', flag: '\uD83C\uDDE8\uD83C\uDDF1', code: '593' },
-];
