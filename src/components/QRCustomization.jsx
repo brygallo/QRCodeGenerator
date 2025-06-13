@@ -1,4 +1,4 @@
-import { TextField, Box, Typography, Stack } from "@mui/material";
+import { TextField, Box, Typography, Stack, Button } from "@mui/material";
 
 const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, error, setError }) => {
 
@@ -11,6 +11,11 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
       setError("");
     }
     setText(value);
+  };
+
+  const handleResetColors = () => {
+    setColor("#000000");
+    setBgColor("#ffffff");
   };
 
   return (
@@ -69,6 +74,9 @@ const QRCustomization = ({ text, setText, color, setColor, bgColor, setBgColor, 
           />
         </Box>
       </Stack>
+      <Button variant="outlined" onClick={handleResetColors} sx={{ mt: 2 }}>
+        Reset Colors
+      </Button>
     </Box>
   );
 };
