@@ -34,6 +34,7 @@ const QRGenerator = () => {
   const [bgImage, setBgImage] = useState(null);
   const [qrPosition, setQrPosition] = useState({ x: 0, y: 0 });
   const [showHandles, setShowHandles] = useState(true);
+  const [qrSize, setQrSize] = useState(250);
 
   const qrValue =
     qrType === "whatsapp"
@@ -121,6 +122,8 @@ const QRGenerator = () => {
                 position={qrPosition}
                 setPosition={setQrPosition}
                 showHandles={showHandles}
+                size={qrSize}
+                setSize={setQrSize}
               />
             </CardContent>
           </Card>

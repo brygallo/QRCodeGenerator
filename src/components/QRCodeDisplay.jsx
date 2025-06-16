@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import QRCodeStyling from "qr-code-styling";
 
-const QR_SIZE = 250;
-
 const QRCodeDisplay = ({
   text,
   color,
@@ -14,18 +12,23 @@ const QRCodeDisplay = ({
   position,
   setPosition,
   showHandles,
+  size,
+  setSize,
 }) => {
   const ref = useRef(null);
   const qrRef = useRef(null);
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [dragging, setDragging] = useState(false);
+  const resizing = useRef(false);
+  const startSize = useRef(0);
+  const startX = useRef(0);
   const overlay = Boolean(background);
 
   useEffect(() => {
     const options = {
-      width: QR_SIZE - 30,
-      height: QR_SIZE - 30,
+      width: size - 30,
+      height: size - 30,
       data: text,
       qrOptions: { errorCorrectionLevel: "H" },
       image: logo || undefined,
@@ -47,19 +50,34 @@ const QRCodeDisplay = ({
       qrRef.current.update(options);
       setLoading(false);
     }
-  }, [text, color, bgColor, shape, logo]);
+  }, [text, color, bgColor, shape, logo, size]);
 
-  const handleMouseDown = (e) => {
+  const handleMouseDown = () => {
     setDragging(true);
   };
 
-  const handleMouseUp = () => setDragging(false);
+  const handleResizeMouseDown = (e) => {
+    e.stopPropagation();
+    resizing.current = true;
+    startSize.current = size;
+    startX.current = e.clientX;
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+    resizing.current = false;
+  };
 
   const handleMouseMove = (e) => {
+    if (resizing.current) {
+      const delta = e.clientX - startX.current;
+      setSize(Math.max(100, startSize.current + delta));
+      return;
+    }
     if (!overlay || !dragging || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const newX = e.clientX - rect.left - QR_SIZE / 2;
-    const newY = e.clientY - rect.top - QR_SIZE / 2;
+    const newX = e.clientX - rect.left - size / 2;
+    const newY = e.clientY - rect.top - size / 2;
     setPosition({ x: newX, y: newY });
   };
 
@@ -72,8 +90,8 @@ const QRCodeDisplay = ({
       id="qr-preview"
       sx={{
         position: "relative",
-        width: overlay ? "100%" : QR_SIZE,
-        minHeight: QR_SIZE,
+        width: overlay ? "100%" : size,
+        height: overlay ? size * 2 : size,
         bgcolor: bgColor,
         backgroundImage: overlay ? `url(${background})` : "none",
         backgroundSize: "contain",
@@ -96,8 +114,8 @@ const QRCodeDisplay = ({
           position: overlay ? "absolute" : "relative",
           left: overlay ? position.x : 0,
           top: overlay ? position.y : 0,
-          width: QR_SIZE,
-          height: QR_SIZE,
+          width: size,
+          height: size,
           cursor: overlay ? "move" : "default",
           border: overlay && showHandles ? "2px dashed #1976d2" : "none",
           display: "flex",
@@ -116,6 +134,21 @@ const QRCodeDisplay = ({
             "& canvas": { margin: "auto" },
           }}
         />
+        {overlay && showHandles && (
+          <Box
+            onMouseDown={handleResizeMouseDown}
+            sx={{
+              position: "absolute",
+              width: 12,
+              height: 12,
+              bgcolor: "#1976d2",
+              bottom: -6,
+              right: -6,
+              cursor: "nwse-resize",
+              borderRadius: 1,
+            }}
+          />
+        )}
         {loading && (
           <Box sx={{ position: "absolute" }}>
             <CircularProgress size={40} />
