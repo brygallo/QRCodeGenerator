@@ -3,6 +3,7 @@ import QRCustomization from "./QRCustomization";
 import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
 import LogoUploader from "./LogoUploader";
+import BackgroundUploader from "./BackgroundUploader";
 import QRContentForm from "./QRContentForm";
 import { generateWhatsappLink } from "../utils/whatsapp";
 import {
@@ -30,6 +31,9 @@ const QRGenerator = () => {
   const [transparent, setTransparent] = useState(false);
   const [warning, setWarning] = useState("");
   const [logo, setLogo] = useState(null);
+  const [bgImage, setBgImage] = useState(null);
+  const [qrPosition, setQrPosition] = useState({ x: 0, y: 0 });
+  const [showHandles, setShowHandles] = useState(true);
 
   const qrValue =
     qrType === "whatsapp"
@@ -98,6 +102,9 @@ const QRGenerator = () => {
               />
               <Box sx={{ mt: 2 }}>
                 <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
+                <Box sx={{ mt: 2 }}>
+                  <BackgroundUploader image={bgImage} setImage={setBgImage} />
+                </Box>
               </Box>
             </CardContent>
           </Card>
@@ -110,6 +117,10 @@ const QRGenerator = () => {
                 bgColor={bgColor}
                 shape={shape}
                 logo={logo}
+                background={bgImage}
+                position={qrPosition}
+                setPosition={setQrPosition}
+                showHandles={showHandles}
               />
             </CardContent>
           </Card>
@@ -122,6 +133,7 @@ const QRGenerator = () => {
                 transparent={transparent}
                 setTransparent={setTransparent}
                 onInvalid={setWarning}
+                setShowHandles={setShowHandles}
               />
             </CardContent>
           </Card>

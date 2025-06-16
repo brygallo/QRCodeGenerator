@@ -4,7 +4,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid }) => {
+const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid, setShowHandles }) => {
 
   const isEmpty = () => {
     if (!text.trim()) {
@@ -28,6 +28,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
     qrElement.style.backgroundColor = transparent ? "transparent" : bgColor;
     qrElement.style.borderRadius = "0px";
+    setShowHandles && setShowHandles(false);
 
     setTimeout(() => {
       html2canvas(qrElement, {
@@ -42,6 +43,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
+        setShowHandles && setShowHandles(true);
       });
     }, 300);
   };
@@ -60,6 +62,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
     qrElement.style.backgroundColor = transparent ? "transparent" : bgColor;
     qrElement.style.borderRadius = "0px";
+    setShowHandles && setShowHandles(false);
 
     setTimeout(() => {
       html2canvas(qrElement, { scale: 4 }).then((canvas) => {
@@ -81,6 +84,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
+        setShowHandles && setShowHandles(true);
       });
     }, 300);
   };
