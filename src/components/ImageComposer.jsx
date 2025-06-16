@@ -17,7 +17,10 @@ const ImageComposer = ({ qrData }) => {
     const url = URL.createObjectURL(file);
     const img = new window.Image();
     img.onload = () => {
-      setStageSize({ width: img.width, height: img.height });
+      const maxW = 500;
+      const maxH = 400;
+      const ratio = Math.min(maxW / img.width, maxH / img.height, 1);
+      setStageSize({ width: img.width * ratio, height: img.height * ratio });
       setBgUrl(url);
     };
     img.src = url;
@@ -79,6 +82,8 @@ const ImageComposer = ({ qrData }) => {
           mt: 2,
           width: stageSize.width,
           height: stageSize.height,
+          maxWidth: "100%",
+          maxHeight: 400,
           position: "relative",
           display: "inline-block",
           border: "1px solid #ccc",
@@ -89,7 +94,7 @@ const ImageComposer = ({ qrData }) => {
           <img
             src={bgUrl}
             alt="background"
-            style={{ width: "100%", height: "100%", display: "block" }}
+            style={{ width: "100%", height: "100%", display: "block", objectFit: "contain" }}
           />
         )}
         {qrData && (
