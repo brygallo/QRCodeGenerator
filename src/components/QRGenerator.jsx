@@ -37,11 +37,25 @@ const QRGenerator = () => {
       : inputText;
 
   return (
-    <Box sx={{ bgcolor: theme.palette.secondary.main, p: 2, minHeight: "100vh" }}>
-      <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2, color:"#FFFFFF" }}>
-        QR Code Generator
-      </Typography>
-      <Stack spacing={2}>
+    <Box
+      sx={{
+        bgcolor: theme.palette.secondary.main,
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        py: 4,
+      }}
+    >
+      <Box sx={{ width: "100%", maxWidth: 480, mx: 2 }}>
+        <Typography
+          variant="h4"
+          align="center"
+          sx={{ fontWeight: "bold", mb: 2, color: "#FFFFFF" }}
+        >
+          QR Code Generator
+        </Typography>
+        <Stack spacing={2}>
         <Card elevation={2}>
           <CardContent>
             <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -99,6 +113,7 @@ const QRGenerator = () => {
           </CardContent>
         </Card>
       </Stack>
+      </Box>
 
       <Snackbar
         open={Boolean(warning)}
