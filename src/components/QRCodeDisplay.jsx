@@ -25,12 +25,14 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
 
     if (!qrRef.current) {
       qrRef.current = new QRCodeStyling(options);
-      qrRef.current.append(ref.current).then(() => setLoading(false));
+      qrRef.current.append(ref.current);
+      setLoading(false);
     } else {
       setLoading(true);
-      qrRef.current.update(options).then(() => setLoading(false));
+      qrRef.current.update(options);
+      setLoading(false);
     }
-  }, [text, color, shape, logo]);
+  }, [text, color, bgColor, shape, logo]);
 
   return (
     <Box
@@ -40,19 +42,30 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: 220,
-        height: 220,
+        width: 250,
+        height: 250,
         bgcolor: bgColor,
-        p: 2,
-        m: 1,
-        borderRadius: bgColor !== "transparent" ? "16px" : "0px",
-        boxShadow: bgColor !== "transparent" ? 3 : 0,
-        border: "1px solid #eee",
+        m: "auto",
+        borderRadius: "16px",
+        boxShadow: 4,
+        border: "1px solid #e0e0e0",
       }}
     >
-      <Box ref={ref} />
+      <Box
+        ref={ref}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          "& canvas": {
+            margin: "auto",
+          },
+        }}
+      />
       {loading && (
-        <Box sx={{ position: 'absolute' }}>
+        <Box sx={{ position: "absolute" }}>
           <CircularProgress size={40} />
         </Box>
       )}
