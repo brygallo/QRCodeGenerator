@@ -19,24 +19,26 @@ const WhatsAppForm = ({ prefix, setPrefix, number, setNumber, message, setMessag
 
   return (
     <Stack spacing={2} sx={{ width: "100%" }}>
-      <Autocomplete
-        options={countryDialCodes}
-        getOptionLabel={(option) => `${option.flag} ${option.name} (+${option.code})`}
-        renderInput={(params) => <TextField {...params} label="Country" />}
-        value={countryDialCodes.find((c) => c.code === prefix) || null}
-        onChange={(event, newValue) => setPrefix(newValue ? newValue.code : "")}
-        isOptionEqualToValue={(option, value) => option.code === value.code}
-        fullWidth
-      />
-      <TextField
-        label="Number"
-        value={number}
-        onChange={(e) => setNumber(e.target.value.replace(/\D/g, ''))}
-        error={number !== '' && !numberIsValid}
-        helperText={number !== '' && !numberIsValid ? 'Invalid' : ''}
-        inputProps={{ inputMode: 'numeric' }}
-        fullWidth
-      />
+      <Stack direction="row" spacing={1}>
+        <Autocomplete
+          options={countryDialCodes}
+          getOptionLabel={(option) => `${option.flag} ${option.name} (+${option.code})`}
+          renderInput={(params) => <TextField {...params} label="Country" />}
+          value={countryDialCodes.find((c) => c.code === prefix) || null}
+          onChange={(event, newValue) => setPrefix(newValue ? newValue.code : "")}
+          isOptionEqualToValue={(option, value) => option.code === value.code}
+          sx={{ minWidth: 150 }}
+        />
+        <TextField
+          label="Number"
+          value={number}
+          onChange={(e) => setNumber(e.target.value.replace(/\D/g, ''))}
+          error={number !== '' && !numberIsValid}
+          helperText={number !== '' && !numberIsValid ? 'Invalid' : ''}
+          inputProps={{ inputMode: 'numeric' }}
+          fullWidth
+        />
+      </Stack>
       <TextField
         label="Optional message"
         multiline
