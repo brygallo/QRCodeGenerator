@@ -4,6 +4,7 @@ import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
 import LogoUploader from "./LogoUploader";
 import QRContentForm from "./QRContentForm";
+import ImageComposer from "./ImageComposer";
 import { generateWhatsappLink } from "../utils/whatsapp";
 import {
   Typography,
@@ -15,10 +16,13 @@ import {
   Card,
   CardContent,
   Stack,
+  Tabs,
+  Tab,
 } from "@mui/material";
 
 const QRGenerator = () => {
   const theme = useTheme();
+  const [tab, setTab] = useState("qr");
   const [qrType, setQrType] = useState("text");
   const [inputText, setInputText] = useState("Hello World");
   const [waPrefix, setWaPrefix] = useState("593");
@@ -30,6 +34,7 @@ const QRGenerator = () => {
   const [transparent, setTransparent] = useState(false);
   const [warning, setWarning] = useState("");
   const [logo, setLogo] = useState(null);
+  const [qrData, setQrData] = useState(null);
 
   const qrValue =
     qrType === "whatsapp"
@@ -61,6 +66,15 @@ const QRGenerator = () => {
         <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2 }}>
           QR Code Generator
         </Typography>
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          centered
+          sx={{ mb: 2 }}
+        >
+          <Tab label="QR Code" value="qr" />
+          <Tab label="Background" value="image" />
+        </Tabs>
 
         <Stack spacing={2}>
           <Card elevation={2}>
@@ -102,7 +116,7 @@ const QRGenerator = () => {
             </CardContent>
           </Card>
 
-          <Card elevation={2}>
+          <Card elevation={2} sx={{ display: tab === "image" ? "none" : "block" }}>
             <CardContent>
               <QRCodeDisplay
                 text={qrValue}
@@ -110,21 +124,32 @@ const QRGenerator = () => {
                 bgColor={bgColor}
                 shape={shape}
                 logo={logo}
+                onUpdate={setQrData}
               />
             </CardContent>
           </Card>
 
-          <Card elevation={2}>
-            <CardContent>
-              <DownloadOptions
-                text={qrValue}
-                bgColor={bgColor}
-                transparent={transparent}
-                setTransparent={setTransparent}
-                onInvalid={setWarning}
-              />
-            </CardContent>
-          </Card>
+          {tab === "qr" && (
+            <Card elevation={2}>
+              <CardContent>
+                <DownloadOptions
+                  text={qrValue}
+                  bgColor={bgColor}
+                  transparent={transparent}
+                  setTransparent={setTransparent}
+                  onInvalid={setWarning}
+                />
+              </CardContent>
+            </Card>
+          )}
+
+          {tab === "image" && (
+            <Card elevation={2}>
+              <CardContent>
+                <ImageComposer qrData={qrData} />
+              </CardContent>
+            </Card>
+          )}
         </Stack>
 
         <Snackbar

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import QRCodeStyling from "qr-code-styling";
+import html2canvas from "html2canvas";
 
-const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
+const QRCodeDisplay = ({ text, color, bgColor, shape, logo, onUpdate }) => {
   const ref = useRef(null);
   const qrRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,14 @@ const QRCodeDisplay = ({ text, color, bgColor, shape, logo }) => {
       qrRef.current.update(options);
       setLoading(false);
     }
+
+    setTimeout(() => {
+      if (onUpdate && ref.current) {
+        html2canvas(ref.current.firstChild, { backgroundColor: null, scale: 2 })
+          .then((canvas) => onUpdate(canvas.toDataURL()))
+          .catch(() => {});
+      }
+    }, 100);
   }, [text, color, bgColor, shape, logo]);
 
   return (

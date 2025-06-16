@@ -18,6 +18,8 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.2",
     "qr-code-styling": "^1.5.0",
+    "react-konva": "^18.2.5",
+    "konva": "^9.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
