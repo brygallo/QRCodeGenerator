@@ -17,6 +17,7 @@ const BackgroundUploader = ({ image, setImage }) => {
           src: reader.result,
           width: img.naturalWidth,
           height: img.naturalHeight,
+          format: file.type.split("/")[1] || "png",
         });
       };
       img.src = reader.result;

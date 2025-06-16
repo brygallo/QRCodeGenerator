@@ -138,6 +138,8 @@ const QRGenerator = () => {
                 onInvalid={setWarning}
                 setShowHandles={setShowHandles}
                 background={bgImage}
+                position={qrPosition}
+                size={qrSize}
               />
             </CardContent>
           </Card>
