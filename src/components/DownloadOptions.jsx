@@ -1,24 +1,20 @@
-import { Button, Stack, FormControlLabel, Checkbox } from "@mui/material";
+import {
+  Button,
+  Stack,
+  FormControlLabel,
+  Checkbox,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Slider,
+  Box,
+} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import PreviewIcon from "@mui/icons-material/ZoomIn";
+import { useState } from "react";
 import html2canvas from "html2canvas";
+import { uuid } from "../utils/uuid";
 
-const uuid = () => {
-  if (window.crypto && window.crypto.randomUUID) {
-    return window.crypto.randomUUID();
-  }
-  let d = new Date().getTime();
-  if (
-    typeof performance !== "undefined" &&
-    typeof performance.now === "function"
-  ) {
-    d += performance.now();
-  }
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-    const r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-  });
-};
 
 const DownloadOptions = ({
   text,
@@ -31,6 +27,10 @@ const DownloadOptions = ({
   position,
   size,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [previewSrc, setPreviewSrc] = useState(null);
+  const [previewExt, setPreviewExt] = useState("png");
+  const [zoom, setZoom] = useState(1);
   const isEmpty = () => {
     if (!text.trim()) {
       onInvalid && onInvalid("Please enter text before downloading.");
@@ -39,102 +39,119 @@ const DownloadOptions = ({
     return false;
   };
 
-  const downloadQRAsImage = () => {
-    if (isEmpty()) return;
+  const generateCanvas = async (withBg) => {
     const qrElement = document.getElementById("qr-code");
+    const preview = document.getElementById("qr-preview");
+    if (!qrElement || (withBg && !preview)) return null;
 
-    if (!qrElement) {
-      console.error("QR Code element not found!");
-      return;
-    }
-
-    const originalBg = qrElement.style.backgroundColor;
-    const originalBorderRadius = qrElement.style.borderRadius;
+    const originalQrBg = qrElement.style.backgroundColor;
+    const originalQrRadius = qrElement.style.borderRadius;
+    const originalBorder = preview ? preview.style.border : null;
+    const originalRadius = preview ? preview.style.borderRadius : null;
+    const originalShadow = preview ? preview.style.boxShadow : null;
 
     qrElement.style.backgroundColor = transparent ? "transparent" : bgColor;
     qrElement.style.borderRadius = "0px";
-    setShowHandles && setShowHandles(false);
-
-    setTimeout(() => {
-      html2canvas(qrElement, {
-        backgroundColor: transparent ? null : bgColor,
-        scale: 4,
-      }).then((canvas) => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = `${uuid()}.png`;
-        link.click();
-
-        qrElement.style.backgroundColor = originalBg;
-        qrElement.style.borderRadius = originalBorderRadius;
-        setShowHandles && setShowHandles(true);
-      });
-    }, 300);
-  };
-
-  const downloadPreviewAsImage = () => {
-    if (isEmpty() || !background || !background.src) return;
-    const preview = document.getElementById("qr-preview");
-    const qrContainer = document.getElementById("qr-code");
-    if (!preview || !qrContainer) {
-      console.error("QR preview element not found!");
-      return;
+    if (preview) {
+      preview.style.border = "none";
+      preview.style.borderRadius = "0";
+      preview.style.boxShadow = "none";
     }
-
-    const originalBorder = preview.style.border;
-    const originalRadius = preview.style.borderRadius;
-    const originalShadow = preview.style.boxShadow;
-
-    preview.style.border = "none";
-    preview.style.borderRadius = "0";
-    preview.style.boxShadow = "none";
     setShowHandles && setShowHandles(false);
 
-    setTimeout(() => {
+    await new Promise((res) => setTimeout(res, 300));
+
+    if (withBg && background && background.src && preview) {
       const previewRect = preview.getBoundingClientRect();
-      const qrRect = qrContainer.getBoundingClientRect();
+      const qrRect = qrElement.getBoundingClientRect();
       const scale = background.width / previewRect.width;
 
       const image = new Image();
-      image.onload = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = background.width;
-        canvas.height = background.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      await new Promise((resolve) => {
+        image.onload = resolve;
+        image.src = background.src;
+      });
 
-        const qrCanvas = qrContainer.querySelector("canvas");
-        if (qrCanvas) {
-          const x = (qrRect.left - previewRect.left) * scale;
-          const y = (qrRect.top - previewRect.top) * scale;
-          const sizeScaled = qrRect.width * scale;
-          ctx.drawImage(
-            qrCanvas,
-            0,
-            0,
-            qrCanvas.width,
-            qrCanvas.height,
-            x,
-            y,
-            sizeScaled,
-            sizeScaled
-          );
-        }
+      const canvas = document.createElement("canvas");
+      canvas.width = background.width;
+      canvas.height = background.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-        const mimeType = `image/${background.format || "png"}`;
-        const ext = background.format === "jpeg" ? "jpg" : background.format || "png";
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL(mimeType, 1.0);
-        link.download = `${uuid()}_background.${ext}`;
-        link.click();
+      const qrCanvas = qrElement.querySelector("canvas");
+      if (qrCanvas) {
+        const x = (qrRect.left - previewRect.left) * scale;
+        const y = (qrRect.top - previewRect.top) * scale;
+        const sizeScaled = qrRect.width * scale;
+        ctx.drawImage(
+          qrCanvas,
+          0,
+          0,
+          qrCanvas.width,
+          qrCanvas.height,
+          x,
+          y,
+          sizeScaled,
+          sizeScaled
+        );
+      }
 
+      const mimeType = `image/${background.format || "png"}`;
+      const ext = background.format === "jpeg" ? "jpg" : background.format || "png";
+
+      qrElement.style.backgroundColor = originalQrBg;
+      qrElement.style.borderRadius = originalQrRadius;
+      if (preview) {
         preview.style.border = originalBorder;
         preview.style.borderRadius = originalRadius;
         preview.style.boxShadow = originalShadow;
-        setShowHandles && setShowHandles(true);
-      };
-      image.src = background.src;
-    }, 300);
+      }
+      setShowHandles && setShowHandles(true);
+
+      return { canvas, mimeType, ext };
+    } else {
+      const canvas = await html2canvas(qrElement, {
+        backgroundColor: transparent ? null : bgColor,
+        scale: 4,
+      });
+
+      qrElement.style.backgroundColor = originalQrBg;
+      qrElement.style.borderRadius = originalQrRadius;
+      setShowHandles && setShowHandles(true);
+
+      return { canvas, mimeType: "image/png", ext: "png" };
+    }
+  };
+
+  const downloadQRAsImage = async () => {
+    if (isEmpty()) return;
+    const result = await generateCanvas(false);
+    if (!result) return;
+    const { canvas, mimeType, ext } = result;
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL(mimeType);
+    link.download = `${uuid()}.${ext}`;
+    link.click();
+  };
+
+  const downloadPreviewAsImage = async () => {
+    if (isEmpty() || !background || !background.src) return;
+    const result = await generateCanvas(true);
+    if (!result) return;
+    const { canvas, mimeType, ext } = result;
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL(mimeType, 1.0);
+    link.download = `${uuid()}_background.${ext}`;
+    link.click();
+  };
+
+  const openAdvancedPreview = async (withBg) => {
+    const result = await generateCanvas(withBg);
+    if (!result) return;
+    setPreviewSrc(result.canvas.toDataURL(result.mimeType, 1.0));
+    setPreviewExt(withBg ? result.ext : "png");
+    setZoom(1);
+    setOpen(true);
   };
 
 
@@ -169,7 +186,50 @@ const DownloadOptions = ({
             Export QR with background
           </Button>
         )}
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => openAdvancedPreview(Boolean(background))}
+          startIcon={<PreviewIcon />}
+        >
+          Advanced preview
+        </Button>
       </Stack>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
+        <DialogTitle>Advanced Preview</DialogTitle>
+        <DialogContent>
+          {previewSrc && (
+            <Stack spacing={2} alignItems="center">
+              <Box
+                component="img"
+                src={previewSrc}
+                alt="preview"
+                sx={{ width: background ? background.width * zoom : size * zoom, maxWidth: "100%" }}
+              />
+              <Slider
+                value={zoom}
+                min={0.5}
+                max={2}
+                step={0.1}
+                onChange={(e, val) => setZoom(val)}
+                sx={{ width: 200 }}
+              />
+              <Button
+                variant="contained"
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = previewSrc;
+                  link.download = `${uuid()}_preview.${previewExt}`;
+                  link.click();
+                }}
+                startIcon={<DownloadIcon />}
+              >
+                Download
+              </Button>
+            </Stack>
+          )}
+        </DialogContent>
+      </Dialog>
     </Stack>
   );
 };
