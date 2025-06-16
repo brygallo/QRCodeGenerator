@@ -73,7 +73,8 @@ const DownloadOptions = ({
   const downloadPreviewAsImage = () => {
     if (isEmpty() || !background || !background.src) return;
     const preview = document.getElementById("qr-preview");
-    if (!preview) {
+    const qrContainer = document.getElementById("qr-code");
+    if (!preview || !qrContainer) {
       console.error("QR preview element not found!");
       return;
     }
@@ -88,9 +89,26 @@ const DownloadOptions = ({
     setShowHandles && setShowHandles(false);
 
     setTimeout(() => {
-      const rect = preview.getBoundingClientRect();
-      const scale = background.width / rect.width;
-      html2canvas(preview, { backgroundColor: null, scale }).then((canvas) => {
+      const previewRect = preview.getBoundingClientRect();
+      const qrRect = qrContainer.getBoundingClientRect();
+      const scale = background.width / previewRect.width;
+
+      const image = new Image();
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = background.width;
+        canvas.height = background.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        const qrCanvas = qrContainer.querySelector("canvas");
+        if (qrCanvas) {
+          const x = (qrRect.left - previewRect.left) * scale;
+          const y = (qrRect.top - previewRect.top) * scale;
+          const size = qrRect.width * scale;
+          ctx.drawImage(qrCanvas, 0, 0, qrCanvas.width, qrCanvas.height, x, y, size, size);
+        }
+
         const link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");
         link.download = `${uuid()}_background.png`;
@@ -100,7 +118,8 @@ const DownloadOptions = ({
         preview.style.borderRadius = originalRadius;
         preview.style.boxShadow = originalShadow;
         setShowHandles && setShowHandles(true);
-      });
+      };
+      image.src = background.src;
     }, 300);
   };
 
