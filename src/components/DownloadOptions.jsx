@@ -146,7 +146,7 @@ const DownloadOptions = ({
           onClick={downloadQRAsImage}
           startIcon={<DownloadIcon />}
         >
-          PNG
+          Export QR
         </Button>
         {background && (
           <Button
@@ -155,7 +155,7 @@ const DownloadOptions = ({
             onClick={downloadPreviewAsImage}
             startIcon={<DownloadIcon />}
           >
-            PNG w/ background
+            Export QR with background
           </Button>
         )}
       </Stack>

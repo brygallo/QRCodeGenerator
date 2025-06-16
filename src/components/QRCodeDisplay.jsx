@@ -27,8 +27,8 @@ const QRCodeDisplay = ({
 
   useEffect(() => {
     const options = {
-      width: size - 30,
-      height: size - 30,
+      width: size,
+      height: size,
       data: text,
       qrOptions: { errorCorrectionLevel: "H" },
       image: logo || undefined,
@@ -97,7 +97,7 @@ const QRCodeDisplay = ({
       id="qr-preview"
       sx={{
         position: "relative",
-        width: "100%",
+        width: overlay ? "100%" : size,
         height: overlay ? "auto" : size,
         aspectRatio: overlay
           ? `${background.width} / ${background.height}`
