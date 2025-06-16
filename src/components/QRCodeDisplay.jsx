@@ -81,6 +81,8 @@ const QRCodeDisplay = ({
     setPosition({ x: newX, y: newY });
   };
 
+  const PREVIEW_HEIGHT = 500;
+
   return (
     <Box
       ref={containerRef}
@@ -90,8 +92,8 @@ const QRCodeDisplay = ({
       id="qr-preview"
       sx={{
         position: "relative",
-        width: overlay ? "100%" : size,
-        height: overlay ? size * 2 : size,
+        width: "100%",
+        height: overlay ? PREVIEW_HEIGHT : size,
         bgcolor: bgColor,
         backgroundImage: overlay ? `url(${background})` : "none",
         backgroundSize: "contain",
