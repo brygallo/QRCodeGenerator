@@ -25,9 +25,11 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
     const originalBg = qrElement.style.backgroundColor;
     const originalBorderRadius = qrElement.style.borderRadius;
+    const originalResize = qrElement.style.resize;
 
     qrElement.style.backgroundColor = transparent ? "transparent" : bgColor;
     qrElement.style.borderRadius = "0px";
+    qrElement.style.resize = "none";
 
     setTimeout(() => {
       html2canvas(qrElement, {
@@ -42,6 +44,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
+        qrElement.style.resize = originalResize;
       });
     }, 300);
   };
@@ -57,9 +60,11 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
     const originalBg = qrElement.style.backgroundColor;
     const originalBorderRadius = qrElement.style.borderRadius;
+    const originalResize = qrElement.style.resize;
 
     qrElement.style.backgroundColor = transparent ? "transparent" : bgColor;
     qrElement.style.borderRadius = "0px";
+    qrElement.style.resize = "none";
 
     setTimeout(() => {
       html2canvas(qrElement, { scale: 4 }).then((canvas) => {
@@ -81,6 +86,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
+        qrElement.style.resize = originalResize;
       });
     }, 300);
   };

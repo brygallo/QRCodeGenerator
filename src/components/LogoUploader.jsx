@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Box, Button, Stack, Avatar, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 const LogoUploader = ({ logo, setLogo, onWarning }) => {
   const inputRef = useRef(null);
@@ -35,9 +36,10 @@ const LogoUploader = ({ logo, setLogo, onWarning }) => {
         variant="contained"
         component="label"
         color="primary"
+        startIcon={<UploadFileIcon />}
         sx={{ textTransform: "none" }}
       >
-        Upload Logo
+        Select File
         <input
           ref={inputRef}
           type="file"
@@ -57,6 +59,15 @@ const LogoUploader = ({ logo, setLogo, onWarning }) => {
           >
             <CloseIcon fontSize="small" />
           </IconButton>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={removeLogo}
+            size="small"
+            sx={{ mt: 1 }}
+          >
+            Remove Logo
+          </Button>
         </Box>
       )}
     </Stack>
