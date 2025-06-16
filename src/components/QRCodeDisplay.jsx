@@ -20,6 +20,7 @@ const QRCodeDisplay = ({
   const containerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [dragging, setDragging] = useState(false);
+  const overlay = Boolean(background);
 
   useEffect(() => {
     const options = {
@@ -55,7 +56,7 @@ const QRCodeDisplay = ({
   const handleMouseUp = () => setDragging(false);
 
   const handleMouseMove = (e) => {
-    if (!dragging || !containerRef.current) return;
+    if (!overlay || !dragging || !containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const newX = e.clientX - rect.left - QR_SIZE / 2;
     const newY = e.clientY - rect.top - QR_SIZE / 2;
@@ -71,10 +72,10 @@ const QRCodeDisplay = ({
       id="qr-preview"
       sx={{
         position: "relative",
-        width: "100%",
+        width: overlay ? "100%" : QR_SIZE,
         minHeight: QR_SIZE,
         bgcolor: bgColor,
-        backgroundImage: background ? `url(${background})` : "none",
+        backgroundImage: overlay ? `url(${background})` : "none",
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -90,15 +91,15 @@ const QRCodeDisplay = ({
     >
       <Box
         id="qr-code"
-        onMouseDown={handleMouseDown}
+        onMouseDown={overlay ? handleMouseDown : undefined}
         sx={{
-          position: "absolute",
-          left: position.x,
-          top: position.y,
+          position: overlay ? "absolute" : "relative",
+          left: overlay ? position.x : 0,
+          top: overlay ? position.y : 0,
           width: QR_SIZE,
           height: QR_SIZE,
-          cursor: "move",
-          border: showHandles ? "2px dashed #1976d2" : "none",
+          cursor: overlay ? "move" : "default",
+          border: overlay && showHandles ? "2px dashed #1976d2" : "none",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

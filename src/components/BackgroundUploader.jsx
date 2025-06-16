@@ -28,7 +28,7 @@ const BackgroundUploader = ({ image, setImage }) => {
         color="primary"
         sx={{ textTransform: "none" }}
       >
-        Seleccionar imagen de fondo
+        Select background image
         <input
           ref={inputRef}
           type="file"

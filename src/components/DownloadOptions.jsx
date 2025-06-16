@@ -4,7 +4,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid, setShowHandles }) => {
+const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid, setShowHandles, background }) => {
 
   const isEmpty = () => {
     if (!text.trim()) {
@@ -43,6 +43,27 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
+        setShowHandles && setShowHandles(true);
+      });
+    }, 300);
+  };
+
+  const downloadPreviewAsImage = () => {
+    if (isEmpty() || !background) return;
+    const preview = document.getElementById("qr-preview");
+    if (!preview) {
+      console.error("QR preview element not found!");
+      return;
+    }
+
+    setShowHandles && setShowHandles(false);
+    setTimeout(() => {
+      html2canvas(preview, { backgroundColor: null, scale: 4 }).then((canvas) => {
+        const link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = `${text || "QR_Code"}_background.png`;
+        link.click();
+
         setShowHandles && setShowHandles(true);
       });
     }, 300);
@@ -89,6 +110,37 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
     }, 300);
   };
 
+  const downloadPreviewAsPDF = () => {
+    if (isEmpty() || !background) return;
+    const preview = document.getElementById("qr-preview");
+    if (!preview) {
+      console.error("QR preview element not found!");
+      return;
+    }
+
+    setShowHandles && setShowHandles(false);
+
+    setTimeout(() => {
+      html2canvas(preview, { scale: 4 }).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4",
+        });
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgSize = 80;
+        const x = (pageWidth - imgSize) / 2;
+        const y = (pageHeight - imgSize) / 2;
+        pdf.addImage(imgData, "PNG", x, y, imgSize, imgSize);
+        pdf.save(`${text || "QR_Code"}_background.pdf`);
+
+        setShowHandles && setShowHandles(true);
+      });
+    }, 300);
+  };
+
   return (
     <Stack direction="column" spacing={2} alignItems="center">
       <FormControlLabel
@@ -105,9 +157,19 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
         <Button variant="contained" color="primary" onClick={downloadQRAsImage} startIcon={<DownloadIcon />}>
           PNG
         </Button>
+        {background && (
+          <Button variant="contained" color="primary" onClick={downloadPreviewAsImage} startIcon={<DownloadIcon />}>
+            PNG w/ background
+          </Button>
+        )}
         <Button variant="contained" color="secondary" onClick={downloadQRAsPDF} startIcon={<PictureAsPdfIcon />}>
           PDF
         </Button>
+        {background && (
+          <Button variant="contained" color="secondary" onClick={downloadPreviewAsPDF} startIcon={<PictureAsPdfIcon />}>
+            PDF w/ background
+          </Button>
+        )}
       </Stack>
     </Stack>
   );

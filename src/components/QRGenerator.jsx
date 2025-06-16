@@ -134,6 +134,7 @@ const QRGenerator = () => {
                 setTransparent={setTransparent}
                 onInvalid={setWarning}
                 setShowHandles={setShowHandles}
+                background={bgImage}
               />
             </CardContent>
           </Card>
