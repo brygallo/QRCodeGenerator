@@ -23,7 +23,7 @@ const QRCodeDisplay = ({
   const resizing = useRef(false);
   const startSize = useRef(0);
   const startX = useRef(0);
-  const overlay = Boolean(background);
+  const overlay = Boolean(background && background.src);
 
   useEffect(() => {
     const options = {
@@ -93,9 +93,13 @@ const QRCodeDisplay = ({
       sx={{
         position: "relative",
         width: "100%",
-        height: overlay ? PREVIEW_HEIGHT : size,
+        height: overlay ? "auto" : size,
+        aspectRatio: overlay
+          ? `${background.width} / ${background.height}`
+          : "1",
+        maxHeight: overlay ? PREVIEW_HEIGHT : undefined,
         bgcolor: bgColor,
-        backgroundImage: overlay ? `url(${background})` : "none",
+        backgroundImage: overlay ? `url(${background.src})` : "none",
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

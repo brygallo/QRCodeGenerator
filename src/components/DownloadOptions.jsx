@@ -1,11 +1,36 @@
 import { Button, Stack, FormControlLabel, Checkbox } from "@mui/material";
-import DownloadIcon from '@mui/icons-material/Download';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DownloadIcon from "@mui/icons-material/Download";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid, setShowHandles, background }) => {
+const uuid = () => {
+  if (window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  let d = new Date().getTime();
+  if (
+    typeof performance !== "undefined" &&
+    typeof performance.now === "function"
+  ) {
+    d += performance.now();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+};
 
+const DownloadOptions = ({
+  text,
+  bgColor,
+  transparent,
+  setTransparent,
+  onInvalid,
+  setShowHandles,
+  background,
+}) => {
   const isEmpty = () => {
     if (!text.trim()) {
       onInvalid && onInvalid("Please enter text before downloading.");
@@ -37,9 +62,8 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
       }).then((canvas) => {
         const link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");
-        link.download = `${text || "QR_Code"}.png`;
+        link.download = `${uuid()}.png`;
         link.click();
-
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
@@ -49,21 +73,36 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
   };
 
   const downloadPreviewAsImage = () => {
-    if (isEmpty() || !background) return;
+    if (isEmpty() || !background || !background.src) return;
     const preview = document.getElementById("qr-preview");
     if (!preview) {
       console.error("QR preview element not found!");
       return;
     }
 
+    const originalBorder = preview.style.border;
+    const originalRadius = preview.style.borderRadius;
+    const originalShadow = preview.style.boxShadow;
+
+    preview.style.border = "none";
+    preview.style.borderRadius = "0";
+    preview.style.boxShadow = "none";
     setShowHandles && setShowHandles(false);
+
     setTimeout(() => {
-      html2canvas(preview, { backgroundColor: null, scale: 4 }).then((canvas) => {
+      const rect = preview.getBoundingClientRect();
+      const scaleX = background.width / rect.width;
+      const scaleY = background.height / rect.height;
+      const scale = Math.max(scaleX, scaleY);
+      html2canvas(preview, { backgroundColor: null, scale }).then((canvas) => {
         const link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");
-        link.download = `${text || "QR_Code"}_background.png`;
+        link.download = `${uuid()}_background.png`;
         link.click();
 
+        preview.style.border = originalBorder;
+        preview.style.borderRadius = originalRadius;
+        preview.style.boxShadow = originalShadow;
         setShowHandles && setShowHandles(true);
       });
     }, 300);
@@ -101,7 +140,7 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
         const y = (pageHeight - imgSize) / 2;
 
         pdf.addImage(imgData, "PNG", x, y, imgSize, imgSize);
-        pdf.save(`${text || "QR_Code"}.pdf`);
+        pdf.save(`${uuid()}.pdf`);
 
         qrElement.style.backgroundColor = originalBg;
         qrElement.style.borderRadius = originalBorderRadius;
@@ -111,17 +150,28 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
   };
 
   const downloadPreviewAsPDF = () => {
-    if (isEmpty() || !background) return;
+    if (isEmpty() || !background || !background.src) return;
     const preview = document.getElementById("qr-preview");
     if (!preview) {
       console.error("QR preview element not found!");
       return;
     }
 
+    const originalBorder = preview.style.border;
+    const originalRadius = preview.style.borderRadius;
+    const originalShadow = preview.style.boxShadow;
+
+    preview.style.border = "none";
+    preview.style.borderRadius = "0";
+    preview.style.boxShadow = "none";
     setShowHandles && setShowHandles(false);
 
     setTimeout(() => {
-      html2canvas(preview, { scale: 4 }).then((canvas) => {
+      const rect = preview.getBoundingClientRect();
+      const scaleX = background.width / rect.width;
+      const scaleY = background.height / rect.height;
+      const scale = Math.max(scaleX, scaleY);
+      html2canvas(preview, { scale }).then((canvas) => {
         const imgData = canvas.toDataURL("image/png");
         const pdf = new jsPDF({
           orientation: "portrait",
@@ -134,8 +184,11 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
         const x = (pageWidth - imgSize) / 2;
         const y = (pageHeight - imgSize) / 2;
         pdf.addImage(imgData, "PNG", x, y, imgSize, imgSize);
-        pdf.save(`${text || "QR_Code"}_background.pdf`);
+        pdf.save(`${uuid()}_background.pdf`);
 
+        preview.style.border = originalBorder;
+        preview.style.borderRadius = originalRadius;
+        preview.style.boxShadow = originalShadow;
         setShowHandles && setShowHandles(true);
       });
     }, 300);
@@ -154,19 +207,39 @@ const DownloadOptions = ({ text, bgColor, transparent, setTransparent, onInvalid
         label="Transparent Background"
       />
       <Stack direction="row" spacing={2}>
-        <Button variant="contained" color="primary" onClick={downloadQRAsImage} startIcon={<DownloadIcon />}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={downloadQRAsImage}
+          startIcon={<DownloadIcon />}
+        >
           PNG
         </Button>
         {background && (
-          <Button variant="contained" color="primary" onClick={downloadPreviewAsImage} startIcon={<DownloadIcon />}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={downloadPreviewAsImage}
+            startIcon={<DownloadIcon />}
+          >
             PNG w/ background
           </Button>
         )}
-        <Button variant="contained" color="secondary" onClick={downloadQRAsPDF} startIcon={<PictureAsPdfIcon />}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={downloadQRAsPDF}
+          startIcon={<PictureAsPdfIcon />}
+        >
           PDF
         </Button>
         {background && (
-          <Button variant="contained" color="secondary" onClick={downloadPreviewAsPDF} startIcon={<PictureAsPdfIcon />}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={downloadPreviewAsPDF}
+            startIcon={<PictureAsPdfIcon />}
+          >
             PDF w/ background
           </Button>
         )}
