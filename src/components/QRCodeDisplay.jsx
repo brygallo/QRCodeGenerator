@@ -78,7 +78,12 @@ const QRCodeDisplay = ({
     const rect = containerRef.current.getBoundingClientRect();
     const newX = e.clientX - rect.left - size / 2;
     const newY = e.clientY - rect.top - size / 2;
-    setPosition({ x: newX, y: newY });
+    const maxX = rect.width - size;
+    const maxY = rect.height - size;
+    setPosition({
+      x: Math.min(Math.max(0, newX), maxX),
+      y: Math.min(Math.max(0, newY), maxY),
+    });
   };
 
   const PREVIEW_HEIGHT = 500;
@@ -98,7 +103,7 @@ const QRCodeDisplay = ({
           ? `${background.width} / ${background.height}`
           : "1",
         maxHeight: overlay ? PREVIEW_HEIGHT : undefined,
-        bgcolor: bgColor,
+        bgcolor: overlay ? 'transparent' : bgColor,
         backgroundImage: overlay ? `url(${background.src})` : "none",
         backgroundSize: "contain",
         backgroundPosition: "center",

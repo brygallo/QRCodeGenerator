@@ -89,9 +89,7 @@ const DownloadOptions = ({
 
     setTimeout(() => {
       const rect = preview.getBoundingClientRect();
-      const scaleX = background.width / rect.width;
-      const scaleY = background.height / rect.height;
-      const scale = Math.max(scaleX, scaleY);
+      const scale = background.width / rect.width;
       html2canvas(preview, { backgroundColor: null, scale }).then((canvas) => {
         const link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");
