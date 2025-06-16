@@ -1,67 +1,15 @@
 import { useRef, useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
-import { Stage, Layer, Image as KonvaImage, Transformer } from "react-konva";
-
-const useImage = (url) => {
-  const [image, setImage] = useState(null);
-  useEffect(() => {
-    if (!url) return;
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.src = url;
-    img.onload = () => setImage(img);
-  }, [url]);
-  return image;
-};
-
-const DraggableQR = ({ image, attrs, onChange }) => {
-  const img = useImage(image);
-  const shapeRef = useRef();
-  const trRef = useRef();
-
-  useEffect(() => {
-    if (trRef.current && shapeRef.current) {
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
-    }
-  }, [img]);
-
-  if (!img) return null;
-
-  return (
-    <>
-      <KonvaImage
-        image={img}
-        x={attrs.x}
-        y={attrs.y}
-        width={attrs.size}
-        height={attrs.size}
-        draggable
-        ref={shapeRef}
-        onDragEnd={(e) =>
-          onChange({ ...attrs, x: e.target.x(), y: e.target.y() })
-        }
-        onTransformEnd={() => {
-          const node = shapeRef.current;
-          const scale = node.scaleX();
-          node.scaleX(1);
-          node.scaleY(1);
-          const newSize = Math.max(20, attrs.size * scale);
-          onChange({ ...attrs, x: node.x(), y: node.y(), size: newSize });
-        }}
-      />
-      <Transformer ref={trRef} keepRatio resizeEnabled />
-    </>
-  );
-};
+import html2canvas from "html2canvas";
 
 const ImageComposer = ({ qrData }) => {
-  const stageRef = useRef();
+  const containerRef = useRef(null);
   const [bgUrl, setBgUrl] = useState(null);
   const [stageSize, setStageSize] = useState({ width: 300, height: 300 });
   const [qrAttrs, setQrAttrs] = useState({ x: 50, y: 50, size: 150 });
-
-  const bgImg = useImage(bgUrl);
+  const [dragging, setDragging] = useState(false);
+  const [resizing, setResizing] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0, size: 150 });
 
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -75,40 +23,111 @@ const ImageComposer = ({ qrData }) => {
     img.src = url;
   };
 
+  const startDrag = (e) => {
+    e.preventDefault();
+    setDragging(true);
+    setStartPos({ x: e.clientX - qrAttrs.x, y: e.clientY - qrAttrs.y, size: qrAttrs.size });
+  };
+
+  const startResize = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setResizing(true);
+    setStartPos({ x: e.clientX, y: e.clientY, size: qrAttrs.size });
+  };
+
+  useEffect(() => {
+    const handleMove = (e) => {
+      if (dragging) {
+        const x = Math.min(Math.max(0, e.clientX - startPos.x), stageSize.width - qrAttrs.size);
+        const y = Math.min(Math.max(0, e.clientY - startPos.y), stageSize.height - qrAttrs.size);
+        setQrAttrs((attrs) => ({ ...attrs, x, y }));
+      } else if (resizing) {
+        const delta = Math.max(e.clientX - startPos.x, e.clientY - startPos.y);
+        const size = Math.max(20, startPos.size + delta);
+        setQrAttrs((attrs) => ({ ...attrs, size }));
+      }
+    };
+    const stop = () => {
+      setDragging(false);
+      setResizing(false);
+    };
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("mouseup", stop);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("mouseup", stop);
+    };
+  }, [dragging, resizing, startPos, stageSize.width, stageSize.height, qrAttrs.size]);
+
   const exportImage = () => {
-    if (!stageRef.current) return;
-    const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
-    const link = document.createElement("a");
-    link.href = uri;
-    link.download = "qr_image.png";
-    link.click();
+    if (!containerRef.current) return;
+    html2canvas(containerRef.current, { backgroundColor: null, scale: 2 }).then((canvas) => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "qr_image.png";
+      link.click();
+    });
   };
 
   return (
     <Box sx={{ textAlign: "center" }}>
-      <input
-        type="file"
-        accept=".png,.jpg,.jpeg,.webp"
-        onChange={handleUpload}
-      />
-      <Box sx={{ mt: 2, display: "inline-block", border: "1px solid #ccc" }}>
-        <Stage width={stageSize.width} height={stageSize.height} ref={stageRef}>
-          <Layer>
-            {bgImg && (
-              <KonvaImage
-                image={bgImg}
-                width={stageSize.width}
-                height={stageSize.height}
-              />
-            )}
-            {qrData && (
-              <DraggableQR image={qrData} attrs={qrAttrs} onChange={setQrAttrs} />
-            )}
-          </Layer>
-        </Stage>
+      <input type="file" accept=".png,.jpg,.jpeg,.webp" onChange={handleUpload} />
+      <Box
+        ref={containerRef}
+        sx={{
+          mt: 2,
+          width: stageSize.width,
+          height: stageSize.height,
+          position: "relative",
+          display: "inline-block",
+          border: "1px solid #ccc",
+          userSelect: "none",
+        }}
+      >
+        {bgUrl && (
+          <img
+            src={bgUrl}
+            alt="background"
+            style={{ width: "100%", height: "100%", display: "block" }}
+          />
+        )}
+        {qrData && (
+          <Box
+            onMouseDown={startDrag}
+            sx={{
+              position: "absolute",
+              left: qrAttrs.x,
+              top: qrAttrs.y,
+              width: qrAttrs.size,
+              height: qrAttrs.size,
+              cursor: dragging ? "grabbing" : "grab",
+            }}
+          >
+            <img
+              src={qrData}
+              alt="qr"
+              style={{ width: "100%", height: "100%" }}
+            />
+            <Box
+              data-handle
+              onMouseDown={startResize}
+              sx={{
+                position: "absolute",
+                width: 12,
+                height: 12,
+                right: -6,
+                bottom: -6,
+                bgcolor: "#fff",
+                border: "1px solid #000",
+                cursor: "nwse-resize",
+              }}
+            />
+          </Box>
+        )}
       </Box>
       <Box sx={{ mt: 2 }}>
-        <Button variant="contained" onClick={exportImage} disabled={!bgImg || !qrData}>
+        <Button variant="contained" onClick={exportImage} disabled={!bgUrl || !qrData}>
           Export as Image
         </Button>
       </Box>
