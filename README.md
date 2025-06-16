@@ -1,6 +1,6 @@
 # ** QR Code Generator**
 
-A **QR Code Generator** with customization options for colors, background, and download choices in **PNG** and **PDF**. Built with **React**, **Material UI**, and **qr-code-styling**.
+A **QR Code Generator** with customization options for colors, background, and download choices in **PNG**. Built with **React**, **Material UI**, and **qr-code-styling**.
 
 ---
 
@@ -11,8 +11,7 @@ A **QR Code Generator** with customization options for colors, background, and d
 ✅ Reset all options with a single click.
 ✅ Upload a custom logo (PNG or SVG) with preview and automatic resizing in the QR code.
 ✅ Option for a **transparent background**.
-✅ Download as **PNG** (with or without background).  
-✅ Download as **PDF** (centered and optimized).  
+✅ Download as **PNG** (with or without background).
 ✅ **Responsive design** with **Material UI**.  
 ✅ **Runs with Docker and Docker Compose**.
 
@@ -70,7 +69,7 @@ The app will be available at `http://localhost:5173`.
 - **React** (Vite)
 - **Material UI** (`@mui/material`)
 - **QRCode.react** (For generating QR codes)
-- **html2canvas** & **jsPDF** (For downloading the QR code as an image or PDF)
+- **html2canvas** (For downloading the QR code as an image)
 - **Docker & Docker Compose** (For containerization)
 
 ---

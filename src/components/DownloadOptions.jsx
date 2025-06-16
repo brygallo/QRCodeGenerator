@@ -1,8 +1,6 @@
 import { Button, Stack, FormControlLabel, Checkbox } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 const uuid = () => {
   if (window.crypto && window.crypto.randomUUID) {
@@ -108,91 +106,6 @@ const DownloadOptions = ({
     }, 300);
   };
 
-  const downloadQRAsPDF = () => {
-    if (isEmpty()) return;
-    const qrElement = document.getElementById("qr-code");
-
-    if (!qrElement) {
-      console.error("QR Code element not found!");
-      return;
-    }
-
-    const originalBg = qrElement.style.backgroundColor;
-    const originalBorderRadius = qrElement.style.borderRadius;
-
-    qrElement.style.backgroundColor = transparent ? "transparent" : bgColor;
-    qrElement.style.borderRadius = "0px";
-    setShowHandles && setShowHandles(false);
-
-    setTimeout(() => {
-      html2canvas(qrElement, { scale: 4 }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-        });
-
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgSize = 80;
-        const x = (pageWidth - imgSize) / 2;
-        const y = (pageHeight - imgSize) / 2;
-
-        pdf.addImage(imgData, "PNG", x, y, imgSize, imgSize);
-        pdf.save(`${uuid()}.pdf`);
-
-        qrElement.style.backgroundColor = originalBg;
-        qrElement.style.borderRadius = originalBorderRadius;
-        setShowHandles && setShowHandles(true);
-      });
-    }, 300);
-  };
-
-  const downloadPreviewAsPDF = () => {
-    if (isEmpty() || !background || !background.src) return;
-    const preview = document.getElementById("qr-preview");
-    if (!preview) {
-      console.error("QR preview element not found!");
-      return;
-    }
-
-    const originalBorder = preview.style.border;
-    const originalRadius = preview.style.borderRadius;
-    const originalShadow = preview.style.boxShadow;
-
-    preview.style.border = "none";
-    preview.style.borderRadius = "0";
-    preview.style.boxShadow = "none";
-    setShowHandles && setShowHandles(false);
-
-    setTimeout(() => {
-      const rect = preview.getBoundingClientRect();
-      const scaleX = background.width / rect.width;
-      const scaleY = background.height / rect.height;
-      const scale = Math.max(scaleX, scaleY);
-      html2canvas(preview, { scale }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF({
-          orientation: "portrait",
-          unit: "mm",
-          format: "a4",
-        });
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgSize = 80;
-        const x = (pageWidth - imgSize) / 2;
-        const y = (pageHeight - imgSize) / 2;
-        pdf.addImage(imgData, "PNG", x, y, imgSize, imgSize);
-        pdf.save(`${uuid()}_background.pdf`);
-
-        preview.style.border = originalBorder;
-        preview.style.borderRadius = originalRadius;
-        preview.style.boxShadow = originalShadow;
-        setShowHandles && setShowHandles(true);
-      });
-    }, 300);
-  };
 
   return (
     <Stack direction="column" spacing={2} alignItems="center">
@@ -223,24 +136,6 @@ const DownloadOptions = ({
             startIcon={<DownloadIcon />}
           >
             PNG w/ background
-          </Button>
-        )}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={downloadQRAsPDF}
-          startIcon={<PictureAsPdfIcon />}
-        >
-          PDF
-        </Button>
-        {background && (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={downloadPreviewAsPDF}
-            startIcon={<PictureAsPdfIcon />}
-          >
-            PDF w/ background
           </Button>
         )}
       </Stack>
