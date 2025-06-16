@@ -38,8 +38,8 @@ const QRGenerator = () => {
       : inputText;
 
   return (
-    <Box sx={{ bgcolor: theme.palette.background.default, p: 2, minHeight: "100vh" }}>
-      <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2 }}>
+    <Box sx={{ bgcolor: theme.palette.secondary.main, p: 2, minHeight: "100vh" }}>
+      <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2, color:"#FFFFFF" }}>
         QR Code Generator
       </Typography>
       <Grid container spacing={2} justifyContent="center">
