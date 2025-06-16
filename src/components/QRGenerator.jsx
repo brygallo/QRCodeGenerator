@@ -12,7 +12,6 @@ import {
   useTheme,
   Snackbar,
   Alert,
-  Grid,
   Card,
   CardContent,
   Stack,
@@ -42,71 +41,64 @@ const QRGenerator = () => {
       <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2, color:"#FFFFFF" }}>
         QR Code Generator
       </Typography>
-      <Grid container spacing={2} justifyContent="center">
-        <Grid item xs={12} md={6}>
-          <Stack spacing={2}>
-            <Card elevation={2}>
-              <CardContent>
-                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-                  <Typography variant="h6">Configuration</Typography>
-                  <Button size="small" variant="outlined" onClick={() => window.location.reload()}>
-                    Reset
-                  </Button>
-                </Box>
-                <QRContentForm
-                  qrType={qrType}
-                  setQrType={setQrType}
-                  inputText={inputText}
-                  setInputText={setInputText}
-                  prefix={waPrefix}
-                  setPrefix={setWaPrefix}
-                  number={waNumber}
-                  setNumber={setWaNumber}
-                  message={waMessage}
-                  setMessage={setWaMessage}
-                />
-              </CardContent>
-            </Card>
+      <Stack spacing={2}>
+        <Card elevation={2}>
+          <CardContent>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+              <Typography variant="h6">Configuration</Typography>
+              <Button size="small" variant="outlined" onClick={() => window.location.reload()}>
+                Reset
+              </Button>
+            </Box>
+            <QRContentForm
+              qrType={qrType}
+              setQrType={setQrType}
+              inputText={inputText}
+              setInputText={setInputText}
+              prefix={waPrefix}
+              setPrefix={setWaPrefix}
+              number={waNumber}
+              setNumber={setWaNumber}
+              message={waMessage}
+              setMessage={setWaMessage}
+            />
+          </CardContent>
+        </Card>
 
-            <Card elevation={2}>
-              <CardContent>
-                <QRCustomization
-                  color={color}
-                  setColor={setColor}
-                  bgColor={bgColor}
-                  setBgColor={setBgColor}
-                  shape={shape}
-                  setShape={setShape}
-                />
-                <Box sx={{ mt: 2 }}>
-                  <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
-                </Box>
-              </CardContent>
-            </Card>
-          </Stack>
-        </Grid>
+        <Card elevation={2}>
+          <CardContent>
+            <QRCustomization
+              color={color}
+              setColor={setColor}
+              bgColor={bgColor}
+              setBgColor={setBgColor}
+              shape={shape}
+              setShape={setShape}
+            />
+            <Box sx={{ mt: 2 }}>
+              <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
+            </Box>
+          </CardContent>
+        </Card>
 
-        <Grid item xs={12} md={6}>
-          <Stack spacing={2} alignItems="center">
-            <Card elevation={2}>
-              <CardContent>
-                <QRCodeDisplay text={qrValue} color={color} bgColor={bgColor} shape={shape} logo={logo} />
-              </CardContent>
-            </Card>
-            <Card elevation={2} sx={{ width: "100%" }}>
-              <CardContent>
-                <DownloadOptions
-                  text={qrValue}
-                  bgColor={bgColor}
-                  transparent={transparent}
-                  setTransparent={setTransparent}
-                  onInvalid={setWarning}
-                />
-              </CardContent>
-            </Card>
-          </Stack>
-        </Grid>
-      </Grid>
+        <Card elevation={2}>
+          <CardContent>
+            <QRCodeDisplay text={qrValue} color={color} bgColor={bgColor} shape={shape} logo={logo} />
+          </CardContent>
+        </Card>
+
+        <Card elevation={2} sx={{ width: "100%" }}>
+          <CardContent>
+            <DownloadOptions
+              text={qrValue}
+              bgColor={bgColor}
+              transparent={transparent}
+              setTransparent={setTransparent}
+              onInvalid={setWarning}
+            />
+          </CardContent>
+        </Card>
+      </Stack>
 
       <Snackbar
         open={Boolean(warning)}
