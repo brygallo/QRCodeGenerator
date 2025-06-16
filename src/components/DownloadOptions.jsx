@@ -92,6 +92,7 @@ const DownloadOptions = ({
 
     setTimeout(() => {
       const previewRect = preview.getBoundingClientRect();
+      const qrRect = qrContainer.getBoundingClientRect();
       const scale = background.width / previewRect.width;
 
       const image = new Image();
@@ -104,10 +105,20 @@ const DownloadOptions = ({
 
         const qrCanvas = qrContainer.querySelector("canvas");
         if (qrCanvas) {
-          const x = position.x * scale;
-          const y = position.y * scale;
-          const sizeScaled = size * scale;
-          ctx.drawImage(qrCanvas, 0, 0, qrCanvas.width, qrCanvas.height, x, y, sizeScaled, sizeScaled);
+          const x = (qrRect.left - previewRect.left) * scale;
+          const y = (qrRect.top - previewRect.top) * scale;
+          const sizeScaled = qrRect.width * scale;
+          ctx.drawImage(
+            qrCanvas,
+            0,
+            0,
+            qrCanvas.width,
+            qrCanvas.height,
+            x,
+            y,
+            sizeScaled,
+            sizeScaled
+          );
         }
 
         const mimeType = `image/${background.format || "png"}`;
