@@ -3,6 +3,7 @@ import QRCustomization from "./QRCustomization";
 import QRCodeDisplay from "./QRCodeDisplay";
 import DownloadOptions from "./DownloadOptions";
 import LogoUploader from "./LogoUploader";
+import BackgroundUploader from "./BackgroundUploader";
 import QRContentForm from "./QRContentForm";
 import ImageComposer from "./ImageComposer";
 import { generateWhatsappLink } from "../utils/whatsapp";
@@ -35,6 +36,10 @@ const QRGenerator = () => {
   const [warning, setWarning] = useState("");
   const [logo, setLogo] = useState(null);
   const [qrData, setQrData] = useState(null);
+  const [bgImage, setBgImage] = useState(null);
+  const [qrPosition, setQrPosition] = useState({ x: 0, y: 0 });
+  const [showHandles, setShowHandles] = useState(true);
+  const [qrSize, setQrSize] = useState(250);
 
   const qrValue =
     qrType === "whatsapp"
@@ -52,20 +57,20 @@ const QRGenerator = () => {
         p: 2,
       }}
     >
-    <Box
-      sx={{
-        bgcolor: "#fff",
-        width: "100%",
-        maxWidth: "750px",
-        borderRadius: 2,             
-        boxShadow: 24,                
-        p: 4,
-
-      }}
-    >
+      <Box
+        sx={{
+          bgcolor: "#fff",
+          width: "100%",
+          maxWidth: "750px",
+          borderRadius: 2,
+          boxShadow: 24,
+          p: 4,
+        }}
+      >
         <Typography variant="h4" align="center" sx={{ fontWeight: "bold", mb: 2 }}>
           QR Code Generator
         </Typography>
+
         <Tabs
           value={tab}
           onChange={(_, v) => setTab(v)}
@@ -112,6 +117,9 @@ const QRGenerator = () => {
               />
               <Box sx={{ mt: 2 }}>
                 <LogoUploader logo={logo} setLogo={setLogo} onWarning={setWarning} />
+                <Box sx={{ mt: 2 }}>
+                  <BackgroundUploader image={bgImage} setImage={setBgImage} />
+                </Box>
               </Box>
             </CardContent>
           </Card>
@@ -124,6 +132,12 @@ const QRGenerator = () => {
                 bgColor={bgColor}
                 shape={shape}
                 logo={logo}
+                background={bgImage}
+                position={qrPosition}
+                setPosition={setQrPosition}
+                showHandles={showHandles}
+                size={qrSize}
+                setSize={setQrSize}
                 onUpdate={setQrData}
               />
             </CardContent>
@@ -138,6 +152,10 @@ const QRGenerator = () => {
                   transparent={transparent}
                   setTransparent={setTransparent}
                   onInvalid={setWarning}
+                  setShowHandles={setShowHandles}
+                  background={bgImage}
+                  position={qrPosition}
+                  size={qrSize}
                 />
               </CardContent>
             </Card>
